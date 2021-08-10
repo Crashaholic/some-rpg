@@ -3,18 +3,24 @@
 #include <string>
 #include <cstdint>
 #include <cstdlib>
+#include <fstream>
 
 using std::string;
 
 namespace Game
 {
+	string dataDirectory = "/data/";
 
 	bool running = true;
 
 	enum GameState
 	{
 		MAIN_MENU,
-		GAME
+		MAIN_MENU_NEW_GAME,
+		MAIN_MENU_LOAD_GAME,
+
+
+		GAME,
 	};
 
 	GameState currentGameState;
@@ -41,6 +47,14 @@ namespace Game
 			DEFENCE,
 			PASSIVE
 		};
+
+		enum Element
+		{
+			FIRE,
+			COLD,
+			SHOCK,
+			EARTH
+		};
 		bool singleTarget = false;
 		
 	};
@@ -48,7 +62,6 @@ namespace Game
 	struct Behaviour
 	{
 		// Behaviour dictates what choices an enitity will make.
-
 		enum BehaviourType
 		{
 			PASSIVE,
@@ -129,6 +142,8 @@ namespace Game
 		return playerInput;
 	}
 
+	bool isLeavingGame = false;
+
 	bool CheckExit()
 	{
 		return playerInput == "exit";
@@ -163,6 +178,16 @@ namespace Game
 		// {
 		// 	Game::StateUpdate();
 		// }
+	}
+
+	void LoadBiomesData()
+	{
+
+	}
+
+	void LoadBiome()
+	{
+
 	}
 }
 
