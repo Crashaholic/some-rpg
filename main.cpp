@@ -4,12 +4,63 @@
 #include <cstdint>
 #include <cstdlib>
 #include <fstream>
+#include <random>
+#include <ctime>
 
 using std::string;
 
 namespace Game
 {
-	string dataDirectory = "/data/";
+	string dataDirectory = "data";
+
+	string dataBiomes = "biome";
+	string dataEntities = "entity";
+
+
+	typedef string UID;
+	// Generates only 7 characters, should have a low chance of collision
+	UID UIDGenPart()
+	{
+		string tmp = "";
+		for (int i = 0; i < 7; ++i)
+		{
+			int temp = rand() % 62;
+			if (temp > 51)
+			{
+				tmp += '0' + temp - 52;
+			}
+			else if (temp > 25)
+			{
+				tmp += 'a' + temp - 26;
+			}
+			else
+			{
+				tmp += 'A' + temp;
+			}
+		}
+		return tmp;
+	}
+
+	UID UIDGen()
+	{
+		string part1, part2, part3, part4, part5;
+		part1 = UIDGenPart();
+		part2 = UIDGenPart();
+		part3 = UIDGenPart();
+		part4 = UIDGenPart();
+		part5 = UIDGenPart();
+		string temp = 
+			part1 + '-' + 
+			part2 + '-' + 
+			part3;
+		return temp;
+	}
+
+	struct Serializable
+	{
+		virtual void WriteToFile() = 0;
+		virtual void ReadFromFile() = 0;
+	};
 
 	bool running = true;
 
@@ -19,13 +70,15 @@ namespace Game
 		MAIN_MENU_NEW_GAME,
 		MAIN_MENU_LOAD_GAME,
 
-
 		GAME,
+		GAME_INTRO_SEQUENCE,
+		GAME_LOOP,
+		// there is no end muahahaha
 	};
 
 	GameState currentGameState;
 
-	struct StatusEffect
+	struct StatusEffect : Serializable
 	{
 		string effectName;
 		string effectDesc;
@@ -37,6 +90,15 @@ namespace Game
 		};
 		EffectType effectType;
 		int effectDur;
+
+		void WriteToFile(string fileName) override
+		{
+		}
+
+		void ReadFromFile(string fileName) override
+		{
+		}
+
 	};
 
 	struct Ability
@@ -56,7 +118,8 @@ namespace Game
 			EARTH
 		};
 		bool singleTarget = false;
-		
+		Element element;
+		string name;
 	};
 
 	struct Behaviour
@@ -83,11 +146,21 @@ namespace Game
 	};
 
 	template <typename T>
-	struct Stat
+	struct Stat : Serializable
 	{
 		T rawCurrent;
 		T maximum;
 		std::vector<StatModifier<T>> modifiers;
+
+		void WriteToFile(string fileName) override
+		{
+				
+		}
+
+		void ReadFromFile(string fileName) override
+		{
+				
+		}
 	};
 
 	struct Entity
@@ -112,23 +185,48 @@ namespace Game
 
 	struct Player : Entity
 	{
-
 	};
 
 	Player currentPlayer;
 
-	struct Item
+	struct Item : Serializable
 	{
 		virtual void ModifyStats() = 0;
+		void WriteToFile(string fileName) override
+		{
+		}
+
+		void ReadFromFile(string fileName) override
+		{
+		}
 	};
 
-	struct Biome
+	struct Biome : Serializable
 	{
 		string biomeName;
 		int biomeLevel;
 
 		std::vector<Entity> spawnables; // PLACEHOLDER!! DO NOT USE!!
+
+		void WriteToFile(string fileName) override
+		{
+
+		}
+
+		void ReadFromFile(string fileName) override
+		{
+		}
 	};
+
+	void LoadBiomesData()
+	{
+		
+	}
+
+	void LoadBiome()
+	{
+
+	}
 
 	string playerInput;
 	string GetInput()
@@ -165,29 +263,28 @@ namespace Game
 
 	void Splash()
 	{
+		srand(time(NULL));
 		std::cout
 		<< "\t\t#======#\n"
 		<< "\t\t# Game #\n"
 		<< "\t\t#======#\n\n\n";
+
+		currentGameState = MAIN_MENU;
 	}
 
 	void Update()
 	{
-		printf("Game is running now!\nAwaiting input...\n");
-		// if (state)
-		// {
-		// 	Game::StateUpdate();
-		// }
-	}
+		switch (currentGameState)
+		{
+				case MAIN_MENU:
+						{
+							printf("");
 
-	void LoadBiomesData()
-	{
-
-	}
-
-	void LoadBiome()
-	{
-
+							break;
+						}
+				default:
+						break;
+		}
 	}
 }
 
@@ -195,7 +292,8 @@ int main(int argc, char** args)
 {
 	Game::Splash();
 
-	// TODO: SHIFT THIS TO THE NEW GAME OPTION
+	// TODO: 
+	// --- SHIFT THIS TO THE NEW GAME OPTION ---
 	if (argc > 1)
 	{
 		Game::currentPlayer.name = args[1];
@@ -207,8 +305,9 @@ int main(int argc, char** args)
 	}
 
 	printf("\n\n\nYour name is... %s\n", Game::currentPlayer.name.c_str());
-	// TO HERE
+	// --- TO HERE ---
 
+	printf("Game is running now!\nAwaiting input...\n");
 	while (Game::running)
 	{
 		Game::Update();
