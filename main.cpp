@@ -7,7 +7,47 @@
 #include <random>
 #include <ctime>
 
+#ifdef __unix__
+#include <ncurses.h>
+#include <curses.h>
+#define PLATFORM_LINUX
+#endif
+
+#ifdef _WIN32
+#include <windows.h>
+#define PLATFORM_WINDOWS
+#endif
+
+
+
 using std::string;
+
+namespace System
+{
+	void DrawAt(char chToDraw, int x, int y)
+	{
+#ifdef PLATFORM_LINUX
+		// use ncurses to compile and draw
+
+#elif PLATFORM_WINDOWS
+		// use WIN API to compile and draw
+
+#endif
+	}
+
+	char GetInput()
+	{
+		char ch;
+#ifdef PLATFORM_LINUX
+		// use ncurses to compile and read
+		ch = getch();
+#elif PLATFORM_WINDOWS
+		// use wim api to compile and read
+		ch = 0;
+#endif
+		return ch;
+	}
+}
 
 namespace Game
 {
@@ -58,8 +98,8 @@ namespace Game
 
 	struct Serializable
 	{
-		virtual void WriteToFile() = 0;
-		virtual void ReadFromFile() = 0;
+		virtual void WriteToFile(string fileName) = 0;
+		virtual void ReadFromFile(string fileName) = 0;
 	};
 
 	bool running = true;
@@ -131,18 +171,44 @@ namespace Game
 			AGGRESSIVE,
 			SUPPORTIVE
 		};
+
 	};
 
 	struct BehaviourController
 	{
-
+		Behaviour currentBehaviour;
 	};
 
 	template <typename T>
 	struct StatModifier
 	{
-		uint32_t modId;
-		T amount;
+		UID modId;
+		T value;
+		string desc;
+		string miniDesc;
+		StatModifier()
+			: modId("invalid")
+		{
+		}
+
+		void Instantiate(T val, string des, string mini)
+		{
+			value = val;
+			desc = des;
+			miniDesc = mini;
+			modId = UIDGen();
+		}
+
+		bool CheckValid()
+		{
+			return modId == "invalid";
+		}
+
+		bool operator== (StatModifier& rhs) const
+		{
+			return modId == rhs.modId;
+		}
+
 	};
 
 	template <typename T>
@@ -151,15 +217,28 @@ namespace Game
 		T rawCurrent;
 		T maximum;
 		std::vector<StatModifier<T>> modifiers;
+		
+		StatModifier<T> FindModifierByUID(UID comp)
+		{
+			for (int i = 0; i < modifiers.size(); ++i)
+			{
+				if (modifiers[i].modId == comp)
+				{
+					return modifiers[i];
+				}
+			}
+
+			return new StatModifier<T>();
+		}
 
 		void WriteToFile(string fileName) override
 		{
-				
+			
 		}
 
 		void ReadFromFile(string fileName) override
 		{
-				
+			
 		}
 	};
 
@@ -228,14 +307,14 @@ namespace Game
 
 	}
 
+	// TODO: get rid of this
+	// replace with ncurses variant
 	string playerInput;
 	string GetInput()
 	{
-		string temp = "";
-		while (temp.empty())
-		{
-			std::getline(std::cin, temp);
-		}
+		char temp[512];
+		//std::getline(std::cin, temp);
+		getstr(temp);
 		playerInput = temp;
 		return playerInput;
 	}
@@ -264,11 +343,6 @@ namespace Game
 	void Splash()
 	{
 		srand(time(NULL));
-		std::cout
-		<< "\t\t#======#\n"
-		<< "\t\t# Game #\n"
-		<< "\t\t#======#\n\n\n";
-
 		currentGameState = MAIN_MENU;
 	}
 
@@ -278,7 +352,7 @@ namespace Game
 		{
 				case MAIN_MENU:
 						{
-							printf("");
+							printw("");
 
 							break;
 						}
@@ -290,6 +364,16 @@ namespace Game
 
 int main(int argc, char** args)
 {
+	int ch;
+#ifdef PLATFORM_LINUX
+	initscr();
+	raw();
+	keypad(stdscr, TRUE);
+	noecho();
+#elif PLATFORM_WINDOWS
+	std::cout << "drawing with windows api isnt setup yet!\n";
+	return 1;
+#endif
 	Game::Splash();
 
 	// TODO: 
@@ -300,22 +384,24 @@ int main(int argc, char** args)
 	}
 	else
 	{
-		std::cout << "Enter your name...\n";
-		Game::currentPlayer.name = Game::GetInput();
+		printw("Enter your name...\n");
 	}
 
-	printf("\n\n\nYour name is... %s\n", Game::currentPlayer.name.c_str());
+	printw("\n\n\nYour name is... %s\n", Game::currentPlayer.name.c_str());
 	// --- TO HERE ---
 
-	printf("Game is running now!\nAwaiting input...\n");
+	printw("Game is running now!\nAwaiting input...\n");
 	while (Game::running)
 	{
 		Game::Update();
+		refresh();
 		Game::GetInput();
 		if (Game::CheckExit()) 
 		{
 			Game::DoExit();
 		}
+		
 	}
+	endwin();
 }
 
