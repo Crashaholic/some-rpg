@@ -24,6 +24,11 @@ using std::string;
 
 namespace System
 {
+	void SetupDrawing()
+	{
+
+	}
+
 	void DrawAt(char chToDraw, int x, int y)
 	{
 #ifdef PLATFORM_LINUX
@@ -87,8 +92,6 @@ namespace Game
 		part1 = UIDGenPart();
 		part2 = UIDGenPart();
 		part3 = UIDGenPart();
-		part4 = UIDGenPart();
-		part5 = UIDGenPart();
 		string temp = 
 			part1 + '-' + 
 			part2 + '-' + 
