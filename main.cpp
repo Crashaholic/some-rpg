@@ -6,62 +6,205 @@
 #include <fstream>
 #include <random>
 #include <ctime>
+#include <filesystem>
+#include <unordered_map>
 
-#ifdef __unix__
+#if defined(__unix__)
+// ncurses reference: https://pubs.opengroup.org/onlinepubs/7908799/xcurses/curses.h.html
+// ref: 
+//		https://www.linuxjournal.com/content/creating-adventure-game-terminal-ncurses
+//		https://www.viget.com/articles/game-programming-in-c-with-the-ncurses-library/
+
+#define PLATFORM_LINUX
 #include <ncurses.h>
 #include <curses.h>
-#define PLATFORM_LINUX
-#endif
 
-#ifdef _WIN32
-#include <windows.h>
+#elif defined(_WIN32)
+// ref and/or src: 
+//		https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
+
 #define PLATFORM_WINDOWS
+#include <windows.h>
+#include <conio.h>
+HANDLE wHnd;
+HANDLE rHnd;
+
 #endif
-
-
 
 using std::string;
+namespace fs = std::filesystem;
+using fs::path;
+
+// GLOBAL VALUES, DO NOT MODIFY UNLESS NEEDED
+#define WINDOW_WIDTH 80
+#define WINDOW_HEIGHT 35
 
 namespace System
 {
+
+#if defined(PLATFORM_LINUX)
+
+#elif defined(PLATFORM_WINDOWS)
+	SMALL_RECT windowSize = { 0, 0, WINDOW_WIDTH - 1, WINDOW_HEIGHT - 1 };
+	COORD bufferSize = { WINDOW_WIDTH, WINDOW_HEIGHT };
+	COORD characterBufferSize = { WINDOW_WIDTH, WINDOW_HEIGHT };
+	COORD characterPosition = { 0, 0 };
+	SMALL_RECT consoleWriteArea = { 0, 0, WINDOW_WIDTH - 1, WINDOW_HEIGHT - 1 };
+	/* A CHAR_INFO structure containing data about a single character */
+	CHAR_INFO consoleBuffer[WINDOW_WIDTH * WINDOW_HEIGHT];
+
+	INPUT_RECORD* eventBuffer;
+
+	/* Read console input buffer and return malloc'd INPUT_RECORD array */
+	DWORD GetInput(INPUT_RECORD** eventBuffer)
+	{
+		/* Variable for holding the number of current events, and a point to it */
+		DWORD numEvents = 0;
+
+		/* Variable for holding how many events were read */
+		DWORD numEventsRead = 0;
+
+		/* Put the number of console input events into numEvents */
+		GetNumberOfConsoleInputEvents(rHnd, &numEvents);
+
+		if (numEvents) /* if there's an event */
+		{
+			/* Allocate the correct amount of memory to store the events */
+			*eventBuffer = (INPUT_RECORD*)malloc(sizeof(INPUT_RECORD) * numEvents);
+			/* Place the stored events into the eventBuffer pointer */
+			ReadConsoleInput(rHnd, *eventBuffer, numEvents, &numEventsRead);
+		}
+		/* Return the amount of events successfully read */
+		return numEventsRead;
+}
+
+#endif
+
 	void SetupDrawing()
+	{
+		#if defined(PLATFORM_LINUX)
+			initscr();
+			raw();
+			keypad(stdscr, TRUE);
+			noecho();
+
+			// TODO: SETUP AN NCURSES WINDOW WITH WINDOW_WIDTH AND WINDOW_HEIGHT
+
+		#elif defined(PLATFORM_WINDOWS)
+			wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
+			rHnd = GetStdHandle(STD_INPUT_HANDLE);
+			SetConsoleTitle(TEXT("some-rpg"));
+
+			/* Set the window size */
+			SetConsoleWindowInfo(wHnd, TRUE, &windowSize);
+			/* Set the screen's buffer size */
+			SetConsoleScreenBufferSize(wHnd, bufferSize);
+
+			//for (int y = 0; y < WINDOW_HEIGHT; ++y)
+			//{
+			//	for (int x = 0; x < WINDOW_WIDTH; ++x)
+			//	{
+			//		consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = (unsigned char)219;
+			//		consoleBuffer[x + WINDOW_WIDTH * y].Attributes = rand() % 256;
+			//	}
+			//}
+
+
+			/* Write our character buffer (a single character currently) to the console buffer */
+			//WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
+
+		#endif
+	}
+
+	void MoveCursor(int x, int y)
 	{
 
 	}
 
 	void DrawAt(char chToDraw, int x, int y)
 	{
-#ifdef PLATFORM_LINUX
-		// use ncurses to compile and draw
+		#if defined(PLATFORM_LINUX)
+			// use ncurses to compile and draw
 
-#elif PLATFORM_WINDOWS
-		// use WIN API to compile and draw
-
-#endif
+		#elif defined(PLATFORM_WINDOWS)
+			// use WIN API to compile and draw
+			//MoveCursor(x, y);
+			consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = chToDraw;
+		#endif
 	}
 
-	char GetInput()
+	void DrawString(string st, int x, int y)
 	{
-		char ch;
-#ifdef PLATFORM_LINUX
-		// use ncurses to compile and read
-		ch = getch();
-#elif PLATFORM_WINDOWS
-		// use wim api to compile and read
-		ch = 0;
+	}
+
+	#if defined(PLATFORM_LINUX)
+	#elif defined(PLATFORM_WINDOWS)
+		std::unordered_map<WORD, bool> windowsKeyMapOldFrame;
+		std::unordered_map<WORD, bool> windowsKeyMapNewFrame;
+	#endif
+
+	void ReadInput()
+	{
+		#if defined(PLATFORM_LINUX)
+			int ch;
+			ch = getch();
+		#elif defined(PLATFORM_WINDOWS)
+			DWORD numEventsRead = GetInput(&eventBuffer);
+
+			if (numEventsRead)
+			{
+				for (int i = 0; i < numEventsRead; ++i)
+				{
+					if (eventBuffer[i].EventType == KEY_EVENT)
+					{
+						windowsKeyMapNewFrame[eventBuffer[i].Event.KeyEvent.wVirtualKeyCode] = eventBuffer[i].Event.KeyEvent.bKeyDown;
+					}
+				}
+				free(eventBuffer);
+			}
+		#endif
+
+	}
+
+	void Render()
+	{
+		#if defined(PLATFORM_LINUX)
+			refresh();
+		#elif defined(PLATFORM_WINDOWS)
+			WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
+		#endif
+	}
+
+	void IsKeyPressed()
+	{
+	}
+
+	void EndFrame()
+	{
+#if defined(PLATFORM_LINUX)
+#elif defined(PLATFORM_WINDOWS)
+
 #endif
-		return ch;
 	}
 }
 
 namespace Game
 {
-	string dataDirectory = "data";
+	// semi soft-coding the directories, might be useful?
 
-	string dataBiomes = "biome";
-	string dataEntities = "entity";
+	path dataDirectory = "data";
 
+	path dataFragmentBiomes = "biome";
+	path dataFragmentEntities = "entity";
+	path dataFragmentExtras = "extras";
+	path dataFragmentAddons = "extras";
 
+	path dataBiomes = dataDirectory / dataFragmentBiomes;
+	path dataEntities = dataDirectory / dataFragmentEntities;
+	path dataExtras = dataDirectory / dataFragmentExtras;
+	path dataAddons = dataDirectory / dataFragmentAddons;
+
+	bool running = true;
 	typedef string UID;
 	// Generates only 7 characters, should have a low chance of collision
 	UID UIDGenPart()
@@ -88,7 +231,7 @@ namespace Game
 
 	UID UIDGen()
 	{
-		string part1, part2, part3, part4, part5;
+		string part1, part2, part3;
 		part1 = UIDGenPart();
 		part2 = UIDGenPart();
 		part3 = UIDGenPart();
@@ -105,9 +248,8 @@ namespace Game
 		virtual void ReadFromFile(string fileName) = 0;
 	};
 
-	bool running = true;
 
-	enum GameState
+	enum class GameState
 	{
 		MAIN_MENU,
 		MAIN_MENU_NEW_GAME,
@@ -125,12 +267,7 @@ namespace Game
 	{
 		string effectName;
 		string effectDesc;
-		enum EffectType
-		{
-			BUFF,
-			DEBUFF,
-			NEUTRAL
-		};
+		enum class EffectType { BUFF, DEBUFF, NEUTRAL };
 		EffectType effectType;
 		int effectDur;
 
@@ -146,35 +283,18 @@ namespace Game
 
 	struct Ability
 	{
-		enum Type
-		{
-			ATTACK,
-			DEFENCE,
-			PASSIVE
-		};
-
-		enum Element
-		{
-			FIRE,
-			COLD,
-			SHOCK,
-			EARTH
-		};
+		enum class Type { ATTACK, DEFENCE, PASSIVE } aType;
+		enum class Element { PHYS, FIRE, COLD, HEAL, } element;
 		bool singleTarget = false;
-		Element element;
 		string name;
+		string desc;
 	};
 
 	struct Behaviour
 	{
 		// Behaviour dictates what choices an enitity will make.
-		enum BehaviourType
-		{
-			PASSIVE,
-			AGGRESSIVE,
-			SUPPORTIVE
-		};
-
+		enum class BehaviourType { PASSIVE, AGGRESSIVE, AFRAID /*for the "rare monsters ig"*/, SUPPORTIVE };
+		BehaviourType bType = BehaviourType::PASSIVE;
 	};
 
 	struct BehaviourController
@@ -221,6 +341,16 @@ namespace Game
 		T maximum;
 		std::vector<StatModifier<T>> modifiers;
 		
+		Stat(T dValue, T mValue)
+		{
+			rawCurrent = dValue;
+			maximum = mValue;
+		}
+
+		Stat()
+		{
+		}
+
 		StatModifier<T> FindModifierByUID(UID comp)
 		{
 			for (int i = 0; i < modifiers.size(); ++i)
@@ -249,15 +379,15 @@ namespace Game
 	{
 		string name;
 
-		Stat<int> strn;
-		Stat<int> intl;
-		Stat<int> dext;
-		Stat<int> agil;
-		Stat<int> luck;
+		Stat<int> strn = Stat<int>(0, 50);
+		Stat<int> intl = Stat<int>(0, 50);
+		Stat<int> dext = Stat<int>(0, 50);
+		Stat<int> agil = Stat<int>(0, 50);
+		Stat<int> luck = Stat<int>(0, 50);
 
-		Stat<float> hp; // hit points
-		Stat<float> sp; // shield points
-		Stat<float> mp; // mana points
+		Stat<float> hp = Stat<float>(0, 9999); // hit points
+		Stat<float> sp = Stat<float>(0, 9999); // shield points
+		Stat<float> mp = Stat<float>(0, 9999); // mana points
 
 		Entity()
 			: name("undefined")
@@ -307,7 +437,7 @@ namespace Game
 
 	void LoadBiome()
 	{
-
+		
 	}
 
 	// TODO: get rid of this
@@ -315,11 +445,46 @@ namespace Game
 	string playerInput;
 	string GetInput()
 	{
-		char temp[512];
+		char temp[512] = "\0";
 		//std::getline(std::cin, temp);
-		getstr(temp);
+#if defined(PLATFORM_LINUX)
+
+#elif defined(PLATFORM_WINDOWS)
+		
+#endif
 		playerInput = temp;
 		return playerInput;
+	}
+
+	void Splash()
+	{
+		srand(time(NULL));
+		currentGameState = GameState::MAIN_MENU;
+	}
+
+	string temp;
+
+	void Update()
+	{
+		switch (currentGameState)
+		{
+			case GameState::MAIN_MENU:
+			{
+				//temp += System::ReadInput();
+				System::DrawAt('a', 0, 0);
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	/**
+	* This will draw the things queued to draw.
+	*/
+	void Draw()
+	{
+		System::Render();
 	}
 
 	bool isLeavingGame = false;
@@ -339,72 +504,34 @@ namespace Game
 		running = false;
 
 
-		printf("Quitting...\n");
+		//printf("Quitting...\n");
 
 	}
 
-	void Splash()
+	void FinalCleanup()
 	{
-		srand(time(NULL));
-		currentGameState = MAIN_MENU;
-	}
+#if defined(PLATFORM_LINUX)
+		endwin();
+#elif defined(PLATFORM_WINDOWS)
 
-	void Update()
-	{
-		switch (currentGameState)
-		{
-				case MAIN_MENU:
-						{
-							printw("");
-
-							break;
-						}
-				default:
-						break;
-		}
+#endif
 	}
 }
 
 int main(int argc, char** args)
 {
 	int ch;
-#ifdef PLATFORM_LINUX
-	initscr();
-	raw();
-	keypad(stdscr, TRUE);
-	noecho();
-#elif PLATFORM_WINDOWS
-	std::cout << "drawing with windows api isnt setup yet!\n";
-	return 1;
-#endif
+	System::SetupDrawing();
 	Game::Splash();
-
-	// TODO: 
-	// --- SHIFT THIS TO THE NEW GAME OPTION ---
-	if (argc > 1)
-	{
-		Game::currentPlayer.name = args[1];
-	}
-	else
-	{
-		printw("Enter your name...\n");
-	}
-
-	printw("\n\n\nYour name is... %s\n", Game::currentPlayer.name.c_str());
-	// --- TO HERE ---
-
-	printw("Game is running now!\nAwaiting input...\n");
 	while (Game::running)
 	{
 		Game::Update();
-		refresh();
+		Game::Draw();
 		Game::GetInput();
 		if (Game::CheckExit()) 
-		{
 			Game::DoExit();
-		}
-		
 	}
-	endwin();
+
+	Game::FinalCleanup();
 }
 
