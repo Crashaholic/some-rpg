@@ -197,12 +197,16 @@ namespace Game
 	path dataFragmentBiomes = "biome";
 	path dataFragmentEntities = "entity";
 	path dataFragmentExtras = "extras";
-	path dataFragmentAddons = "extras";
+	path dataFragmentAddons = "addons";
 
 	path dataBiomes = dataDirectory / dataFragmentBiomes;
 	path dataEntities = dataDirectory / dataFragmentEntities;
 	path dataExtras = dataDirectory / dataFragmentExtras;
 	path dataAddons = dataDirectory / dataFragmentAddons;
+
+    // idea: have a whole thing where the base game is also a package that
+    // you can get data from.
+
 
 	bool running = true;
 	typedef string UID;
