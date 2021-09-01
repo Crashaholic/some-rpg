@@ -11,7 +11,7 @@
 
 #if defined(__unix__)
 // ncurses reference: https://pubs.opengroup.org/onlinepubs/7908799/xcurses/curses.h.html
-// ref: 
+// ref:
 //		https://www.linuxjournal.com/content/creating-adventure-game-terminal-ncurses
 //		https://www.viget.com/articles/game-programming-in-c-with-the-ncurses-library/
 
@@ -20,7 +20,7 @@
 #include <curses.h>
 
 #elif defined(_WIN32)
-// ref and/or src: 
+// ref and/or src:
 //		https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
 
 #define PLATFORM_WINDOWS
@@ -235,9 +235,9 @@ namespace Game
 		part1 = UIDGenPart();
 		part2 = UIDGenPart();
 		part3 = UIDGenPart();
-		string temp = 
-			part1 + '-' + 
-			part2 + '-' + 
+		string temp =
+			part1 + '-' +
+			part2 + '-' +
 			part3;
 		return temp;
 	}
@@ -340,7 +340,7 @@ namespace Game
 		T rawCurrent;
 		T maximum;
 		std::vector<StatModifier<T>> modifiers;
-		
+
 		Stat(T dValue, T mValue)
 		{
 			rawCurrent = dValue;
@@ -366,12 +366,12 @@ namespace Game
 
 		void WriteToFile(string fileName) override
 		{
-			
+
 		}
 
 		void ReadFromFile(string fileName) override
 		{
-			
+
 		}
 	};
 
@@ -432,12 +432,12 @@ namespace Game
 
 	void LoadBiomesData()
 	{
-		
+
 	}
 
 	void LoadBiome()
 	{
-		
+
 	}
 
 	// TODO: get rid of this
@@ -450,7 +450,7 @@ namespace Game
 #if defined(PLATFORM_LINUX)
 
 #elif defined(PLATFORM_WINDOWS)
-		
+
 #endif
 		playerInput = temp;
 		return playerInput;
@@ -528,7 +528,7 @@ int main(int argc, char** args)
 		Game::Update();
 		Game::Draw();
 		Game::GetInput();
-		if (Game::CheckExit()) 
+		if (Game::CheckExit())
 			Game::DoExit();
 	}
 
