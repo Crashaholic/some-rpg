@@ -21,57 +21,6 @@ namespace Game
 		// there is no end muahahaha
 	} currentGameState ;
 
-	struct StatusEffect
-	{
-		string effectName;
-		string effectDesc;
-		enum class EffectType { BUFF, DEBUFF, NEUTRAL };
-		EffectType effectType;
-		int effectDur;
-	};
-
-	struct Ability
-	{
-		enum class Type { ATTACK, DEFENCE, PASSIVE } aType;
-		enum class Element { PHYS, FIRE, COLD, HEAL, } element;
-		bool singleTarget = false;
-		string name;
-		string desc;
-	};
-
-	struct Behaviour
-	{
-		// Behaviour dictates what choices an enitity will make.
-		enum class BehaviourType { PASSIVE, AGGRESSIVE, AFRAID /*for the "rare monsters ig"*/, SUPPORTIVE };
-		BehaviourType bType = BehaviourType::PASSIVE;
-	};
-
-	struct BehaviourController
-	{
-		Behaviour currentBehaviour;
-	};
-
-
-
-	struct Player : Entity
-	{
-	};
-
-	Player currentPlayer;
-
-	struct Item : Serializable
-	{
-		virtual void ModifyStats() = 0;
-		void WriteToFile(string fileName) override
-		{
-		}
-
-		void ReadFromFile(string fileName) override
-		{
-		}
-	};
-
-
 	void Splash()
 	{
 		srand(time(NULL));
