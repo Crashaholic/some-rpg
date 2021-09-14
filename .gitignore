@@ -1,5 +1,6 @@
-*
+# Linux stuffs
 
-!*/src/*
-!.gitignore
-!makefile
+*.layout
+/bin/
+/obj/
+

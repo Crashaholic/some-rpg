@@ -1,0 +1,51 @@
+# depslib dependency file v1.0
+1630740628 source:/home/crashaholic/Desktop/Projects/some-rpg/src/game.cpp
+
+1630740628 source:/home/crashaholic/Desktop/Projects/some-rpg/src/syswrap.cpp
+
+1631505985 source:/home/crashaholic/Desktop/Projects/some-rpg/src/main.cpp
+	"game.h"
+
+1631660819 /home/crashaholic/Desktop/Projects/some-rpg/src/game.h
+	"syswrap.h"
+	"game/entity.h"
+	"game/biome.h"
+	"gamepackage.h"
+
+1631660794 /home/crashaholic/Desktop/Projects/some-rpg/src/syswrap.h
+	<iostream>
+	<vector>
+	<string>
+	<cstdint>
+	<cstdlib>
+	<fstream>
+	<random>
+	<ctime>
+	<filesystem>
+	<unordered_map>
+	<ncurses.h>
+	<curses.h>
+	<windows.h>
+	<conio.h>
+
+1631574215 /home/crashaholic/Desktop/Projects/some-rpg/src/game/stat.h
+	"serializable.h"
+	"statmod.h"
+
+1631616051 /home/crashaholic/Desktop/Projects/some-rpg/src/game/serializable.h
+
+1631500019 /home/crashaholic/Desktop/Projects/some-rpg/src/game/statmod.h
+	"uidgen.h"
+
+1631498507 /home/crashaholic/Desktop/Projects/some-rpg/src/game/uidgen.h
+	<string>
+
+1631574115 /home/crashaholic/Desktop/Projects/some-rpg/src/game/entity.h
+	"stat.h"
+
+1631615987 /home/crashaholic/Desktop/Projects/some-rpg/src/game/biome.h
+	"entity.h"
+
+1631616448 /home/crashaholic/Desktop/Projects/some-rpg/src/gamepackage.h
+	"game/serializable.h"
+
