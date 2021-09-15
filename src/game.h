@@ -34,7 +34,13 @@ namespace Game
 		{
 			case GameState::MAIN_MENU:
 			{
-				PlatformSystem::DrawAt('a', 1, 1);
+				PlatformSystem::DrawAt('G', 0, 0);
+				PlatformSystem::DrawAt('r', 1, 0);
+				PlatformSystem::DrawAt('e', 2, 0);
+				PlatformSystem::DrawAt('m', 3, 0);
+				PlatformSystem::DrawAt('s', 4, 0);
+				PlatformSystem::DrawAt('p', 5, 0);
+				PlatformSystem::DrawAt('o', 6, 0);
 				break;
 			}
 			default:
@@ -77,11 +83,7 @@ namespace Game
 
 	void FinalCleanup()
 	{
-        #if defined(PLATFORM_LINUX)
-                endwin();
-        #elif defined(PLATFORM_WINDOWS)
-
-        #endif
+	    PlatformSystem::ExitGame();
 	}
 }
 

@@ -141,13 +141,6 @@ namespace PlatformSystem
 		#endif
 	}
 
-	void MoveCursor(int x, int y)
-	{
-        #if defined(PLATFORM_LINUX)
-            move(y, x);
-        #endif // defined
-	}
-
 	void DrawAt(char chToDraw, int x, int y)
 	{
 		#if defined(PLATFORM_LINUX)
@@ -171,6 +164,9 @@ namespace PlatformSystem
 	void DrawString(string st, int x, int y)
 	{
 	    //lazy, would probably just use printw
+	    #if defined (PLATFORM_LINUX)
+	    mvprintw(y, x, st.c_str());
+	    #endif
 	}
 
 	#if defined(PLATFORM_LINUX)
@@ -231,6 +227,8 @@ namespace PlatformSystem
 	{
 	    #if defined (PLATFORM_LINUX)
 	    clear();
+	    #elif defined (PLATFORM_WINDOWS)
+        // something to go here on dinwows
 	    #endif
 	}
 
@@ -246,6 +244,13 @@ namespace PlatformSystem
         #elif defined(PLATFORM_WINDOWS)
 
         #endif
+	}
+
+	void ExitGame()
+	{
+	    #if defined(PLATFORM_LINUX)
+            endwin();
+	    #endif
 	}
 }
 #endif // SYSWRAP_H
