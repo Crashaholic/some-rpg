@@ -109,6 +109,8 @@ namespace PlatformSystem
 			keypad(stdscr, TRUE);
 			noecho();
             curs_set(FALSE);
+            cbreak();
+            timeout(0);
 			// TODO: SETUP AN NCURSES WINDOW WITH WINDOW_WIDTH AND WINDOW_HEIGHT
 
 

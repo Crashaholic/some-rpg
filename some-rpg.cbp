@@ -39,11 +39,17 @@
 		</Linker>
 		<Unit filename="src/game.cpp" />
 		<Unit filename="src/game.h" />
+		<Unit filename="src/game/ability.h" />
+		<Unit filename="src/game/behaviour.h" />
+		<Unit filename="src/game/behaviourcontroller.h" />
 		<Unit filename="src/game/biome.h" />
 		<Unit filename="src/game/entity.h" />
+		<Unit filename="src/game/item.h" />
+		<Unit filename="src/game/player.h" />
 		<Unit filename="src/game/serializable.h" />
 		<Unit filename="src/game/stat.h" />
 		<Unit filename="src/game/statmod.h" />
+		<Unit filename="src/game/statusfx.h" />
 		<Unit filename="src/game/uidgen.h" />
 		<Unit filename="src/gamepackage.h" />
 		<Unit filename="src/main.cpp" />
