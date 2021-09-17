@@ -64,7 +64,7 @@ namespace PlatformSystem
 {
 
 #if defined(PLATFORM_LINUX)
-
+    WINDOW* mainWindow = nullptr;
 #elif defined(PLATFORM_WINDOWS)
 	SMALL_RECT windowSize = { 0, 0, WINDOW_WIDTH - 1, WINDOW_HEIGHT - 1 };
 	COORD bufferSize = { WINDOW_WIDTH, WINDOW_HEIGHT };
@@ -112,7 +112,7 @@ namespace PlatformSystem
             cbreak();
             timeout(0);
 			// TODO: SETUP AN NCURSES WINDOW WITH WINDOW_WIDTH AND WINDOW_HEIGHT
-
+            mainWindow = newwin(WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0);
 
 
 		#elif defined(PLATFORM_WINDOWS)
@@ -153,20 +153,16 @@ namespace PlatformSystem
 		#endif
 	}
 
-    #if defined(PLATFORM_LINUX)
-    void DrawAt(char chToDraw, int x, int y, chtype attr)
-    {
-        mvaddch(y, x, chToDraw | attr);
-    }
-
-    #endif // defined
-
 	void DrawString(string st, int x, int y)
 	{
-	    //lazy, would probably just use printw
-	    #if defined (PLATFORM_LINUX)
-	    mvprintw(y, x, st.c_str());
-	    #endif
+	    if (x + st.length() > WINDOW_WIDTH || x < 0 || y > WINDOW_HEIGHT || y < 0)
+	    {
+	        #if defined (PLATFORM_LINUX)
+
+            #elif defined (PLATFORM_WINDOWS)
+            // TODO: THIS SHITE
+            #endif
+	    }
 	}
 
 	#if defined(PLATFORM_LINUX)
@@ -179,11 +175,13 @@ namespace PlatformSystem
 		WindowsKeyMap windowsKeyMapNewFrame;
 	#endif
 
+	//TODO: POSSIBLE REDO KEY HANDLING FOR LINUX SIDE
 	void ReadInput()
 	{
 		#if defined(PLATFORM_LINUX)
-			int ch = getch();
-            linuxKeysJustDown[ch] = true;
+            int ch;
+			while ((ch = getch()) != ERR)
+                linuxKeysJustDown[ch] = true;
 		#elif defined(PLATFORM_WINDOWS)
 			DWORD numEventsRead = GetInput(&eventBuffer);
 
