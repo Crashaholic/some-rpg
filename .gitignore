@@ -1,6 +1,19 @@
 # Linux stuffs
 
 *.layout
+*.cbp
+*.depend
+
+makefile
+
 /bin/
 /obj/
 
+# Windows stuffs
+
+/Debug/
+/some-rpg/Debug/
+/.vs/
+
+*.filters
+*.user
