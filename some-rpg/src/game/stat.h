@@ -11,7 +11,7 @@ namespace Game
 		T rawCurrent;
 		T maximum;
 		string name;
-		std::vector<StatModifier<T>> modifiers;
+		//std::vector<StatModifier<T>> modifiers;
 
 		Stat(string statName, T dValue, T mValue)
 		{
@@ -24,7 +24,7 @@ namespace Game
 		{
 		}
 
-		StatModifier<T> FindModifierByUID(UID comp)
+		/*StatModifier<T> FindModifierByUID(UID comp)
 		{
 			for (int i = 0; i < modifiers.size(); ++i)
 			{
@@ -35,7 +35,7 @@ namespace Game
 			}
 
 			return new StatModifier<T>();
-		}
+		}*/
 
 		void WriteToFile(string fileName) override
 		{

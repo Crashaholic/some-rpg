@@ -5,16 +5,16 @@
 int main(int argc, char** args)
 {
 	PlatformSystem::SetupDrawing();
-	Game::Splash();
-	while (Game::running)
+	Game::G::Get().Splash();
+	while (Game::G::Get().running)
 	{
-		Game::Update();
-		Game::Draw();
+		Game::G::Get().Update();
+		Game::G::Get().Draw();
 		//Game::GetInput(); // TODO: FIX THIS
-		if (Game::CheckExit())
-			Game::DoExit();
+		if (Game::G::Get().CheckExit())
+			Game::G::Get().DoExit();
 	}
 
-	Game::FinalCleanup();
+	Game::G::Get().FinalCleanup();
 }
 

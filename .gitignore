@@ -4,16 +4,22 @@
 *.cbp
 *.depend
 
-makefile
+bin/
+obj/
 
-/bin/
-/obj/
+CMakeCache.txt
+[Dd]ebug/
 
+*.cmake
+
+[Mm]akefile
+CMakeFiles/
+
+compile_commands.json
 # Windows stuffs
 
-/Debug/
-/some-rpg/Debug/
-/.vs/
+# some-rpg/Debug/
+.vs/
 
 *.filters
 *.user

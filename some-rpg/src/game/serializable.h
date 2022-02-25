@@ -1,7 +1,12 @@
 #ifndef SERIALIZABLE_H
 #define SERIALIZABLE_H
 
-namespace Game
+#include <string>
+#include <filesystem>
+
+using std::string;
+
+namespace Serializing 
 {
     /**
     \struct Serializable

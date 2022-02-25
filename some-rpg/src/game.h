@@ -1,92 +1,61 @@
 #ifndef GAME_H
 #define GAME_H
 #include "syswrap.h"
-#include "game/entity.h"
-#include "game/biome.h"
-#include "gamepackage.h"
+//#include "game/entity.h"
+//#include "game/biome.h"
+//#include "gamepackage.h"
 
 namespace Game
 {
-	bool running = true;
-
-	enum class GameState
+	class G
 	{
-		MAIN_MENU,
-		MAIN_MENU_NEW_GAME,
-		MAIN_MENU_LOAD_GAME,
-
-		GAME,
-		GAME_INTRO_SEQUENCE,
-		GAME_LOOP,
-		// there is no end muahahaha
-	} currentGameState ;
-
-	void Splash()
-	{
-		srand(time(NULL));
-		currentGameState = GameState::MAIN_MENU;
-	}
-
-	void Update()
-	{
-	    PlatformSystem::ReadInput();
-		switch (currentGameState)
+		G()
 		{
-			case GameState::MAIN_MENU:
-			{
-				PlatformSystem::DrawAt('G', 0, 0);
-				PlatformSystem::DrawAt('r', 1, 0);
-				PlatformSystem::DrawAt('e', 2, 0);
-				PlatformSystem::DrawAt('m', 3, 0);
-				PlatformSystem::DrawAt('s', 4, 0);
-				PlatformSystem::DrawAt('p', 5, 0);
-				PlatformSystem::DrawAt('o', 6, 0);
-				break;
-			}
-			default:
-				break;
+
 		}
-	}
+		G(const G& copy) = delete;
+		G operator=(const G& copy) = delete;
 
-	/**
-	* This will draw the things queued to draw.
-	*/
-	void Draw()
-	{
-		PlatformSystem::Render();
-	}
+		public:
+		static G& Get()
+		{
+			static G g;
+			return g;
+		}
 
-	bool isLeavingGame = false;
+		bool running = true;
+		enum class GameState
+		{
+			MAIN_MENU,
+			MAIN_MENU_NEW_GAME,
+			MAIN_MENU_LOAD_GAME,
 
-    // exists to prevent any form of unwanted exits!
-	bool CheckExit()
-	{
-	    if (PlatformSystem::IsKeyPressed('p'))
-        {
-            return true;
-        }
-        return false;
-	}
+			GAME,
+			GAME_INTRO_SEQUENCE,
+			GAME_LOOP,
+			// there is no end muahahaha
+		};
 
-	void DoExit()
-	{
-		//TODO: CLEANUP STUFFS
+		GameState currentGameState;
 
-		// THIS LINE IS IMPORTANT!!!
-		// DO NOT REMOVE, OR THE GAME WILL NEVER STOP!!!
-		running = false;
+		void Splash();
+		void Update();
 
+		/**
+		 * This will draw the things queued to draw.
+		 */
+		void Draw();
+		bool isLeavingGame = false;
 
-		//printf("Quitting...\n");
+		// exists to prevent any form of unwanted exits!
+		bool CheckExit();
 
-	}
+		void DoExit();
 
-	void FinalCleanup()
-	{
-	    PlatformSystem::ExitGame();
-	}
+		void FinalCleanup();
+
+	};
+
 }
-
-
 #endif // GAME_H
 

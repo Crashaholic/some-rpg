@@ -52,7 +52,7 @@ HANDLE rHnd;
 #endif
 
 using std::string;
-namespace fs = std::filesystem;
+namespace fs = std::__fs::filesystem;
 using fs::path;
 
 // GLOBAL VALUES, DO NOT MODIFY UNLESS NEEDED
@@ -64,7 +64,7 @@ namespace PlatformSystem
 {
 
 #if defined(PLATFORM_LINUX)
-    WINDOW* mainWindow = nullptr;
+    static WINDOW* mainWindow = nullptr;
 #elif defined(PLATFORM_WINDOWS)
 	SMALL_RECT windowSize = { 0, 0, WINDOW_WIDTH - 1, WINDOW_HEIGHT - 1 };
 	COORD bufferSize = { WINDOW_WIDTH, WINDOW_HEIGHT };
@@ -97,11 +97,11 @@ namespace PlatformSystem
 		}
 		/* Return the amount of events successfully read */
 		return numEventsRead;
-}
+	}
 
 #endif
 
-	void SetupDrawing()
+	static void SetupDrawing()
 	{
 		#if defined(PLATFORM_LINUX)
 			initscr();
@@ -131,7 +131,7 @@ namespace PlatformSystem
 			//	{
 			//		consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = (unsigned char)219;
 			//		consoleBuffer[x + WINDOW_WIDTH * y].Attributes = rand() % 256;
-			//	}
+			//
 			//}
 
 
@@ -141,7 +141,7 @@ namespace PlatformSystem
 		#endif
 	}
 
-	void DrawAt(char chToDraw, int x, int y)
+	static void DrawAt(char chToDraw, int x, int y)
 	{
 		#if defined(PLATFORM_LINUX)
 			// use ncurses to compile and draw
@@ -153,12 +153,16 @@ namespace PlatformSystem
 		#endif
 	}
 
-	void DrawString(string st, int x, int y)
+	static void DrawString(string st, int x, int y)
 	{
+		// this if check is to see if the whole string would fit within the window
 	    if (x + st.length() > WINDOW_WIDTH || x < 0 || y > WINDOW_HEIGHT || y < 0)
 	    {
 	        #if defined (PLATFORM_LINUX)
-
+				for (ssize_t i = 0; i < st.length(); ++i)
+				{
+					mvaddch(y, x + i, st[i]);
+				}
             #elif defined (PLATFORM_WINDOWS)
             // TODO: THIS SHITE
             #endif
@@ -167,8 +171,8 @@ namespace PlatformSystem
 
 	#if defined(PLATFORM_LINUX)
         typedef std::unordered_map<int, bool> LinuxKeyMap;
-        LinuxKeyMap linuxKeys;
-        LinuxKeyMap linuxKeysJustDown;
+        static LinuxKeyMap linuxKeys;
+        static LinuxKeyMap linuxKeysJustDown;
 	#elif defined(PLATFORM_WINDOWS)
 		typedef std::unordered_map<WORD, bool> WindowsKeyMap;
         WindowsKeyMap windowsKeyMapOldFrame;
@@ -176,7 +180,7 @@ namespace PlatformSystem
 	#endif
 
 	//TODO: POSSIBLE REDO KEY HANDLING FOR LINUX SIDE
-	void ReadInput()
+	static void ReadInput()
 	{
 		#if defined(PLATFORM_LINUX)
             int ch;
@@ -203,7 +207,7 @@ namespace PlatformSystem
 	/**
 
 	*/
-	void Render()
+	static void Render()
 	{
 		#if defined(PLATFORM_LINUX)
 			refresh();
@@ -212,7 +216,7 @@ namespace PlatformSystem
 		#endif
 	}
 
-	bool IsKeyPressed(int ch)
+	static bool IsKeyPressed(int ch)
 	{
 	    #if defined (PLATFORM_LINUX)
 	    return linuxKeysJustDown[ch];
@@ -221,7 +225,7 @@ namespace PlatformSystem
         #endif
 	}
 
-	void NewFrame()
+	static void NewFrame()
 	{
 	    #if defined (PLATFORM_LINUX)
 	    clear();
@@ -230,7 +234,7 @@ namespace PlatformSystem
 	    #endif
 	}
 
-	void EndFrame()
+	static void EndFrame()
 	{
         #if defined(PLATFORM_LINUX)
             // TODO: maybe correct this?
@@ -244,7 +248,7 @@ namespace PlatformSystem
         #endif
 	}
 
-	void ExitGame()
+	static void ExitGame()
 	{
 	    #if defined(PLATFORM_LINUX)
             endwin();

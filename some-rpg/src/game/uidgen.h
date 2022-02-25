@@ -4,7 +4,7 @@ using std::string;
 
 typedef string UID;
 // Generates only 7 characters, should have a low chance of collision
-namespace Game
+namespace ID 
 {
     UID UIDGenPart()
     {
