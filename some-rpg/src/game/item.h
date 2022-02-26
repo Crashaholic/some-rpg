@@ -3,7 +3,7 @@
 #include "serializable.h"
 namespace Game
 {
-	struct Item : Serializable
+	struct Item : Serializing::Serializable
 	{
 		virtual void ModifyStats() = 0;
 		void WriteToFile(string fileName) override

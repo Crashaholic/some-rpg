@@ -25,18 +25,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game.h" />
-    <ClInclude Include="src\gamepackage.h" />
-    <ClInclude Include="src\game\ability.h" />
-    <ClInclude Include="src\game\behaviour.h" />
-    <ClInclude Include="src\game\behaviourcontroller.h" />
-    <ClInclude Include="src\game\biome.h" />
-    <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\game\item.h" />
-    <ClInclude Include="src\game\player.h" />
     <ClInclude Include="src\game\serializable.h" />
     <ClInclude Include="src\game\stat.h" />
-    <ClInclude Include="src\game\statmod.h" />
-    <ClInclude Include="src\game\statusfx.h" />
     <ClInclude Include="src\game\uidgen.h" />
     <ClInclude Include="src\syswrap.h" />
   </ItemGroup>

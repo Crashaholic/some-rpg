@@ -1,20 +1,20 @@
 #include "game.h"
 
-
+using Game::G;
 
 int main(int argc, char** args)
 {
-	PlatformSystem::SetupDrawing();
-	Game::G::Get().Splash();
-	while (Game::G::Get().running)
+	PlatformSystem::Get().SetupDrawing();
+	G::Get().Splash();
+	while (G::Get().running)
 	{
-		Game::G::Get().Update();
-		Game::G::Get().Draw();
+		G::Get().Update();
+		G::Get().Draw();
 		//Game::GetInput(); // TODO: FIX THIS
-		if (Game::G::Get().CheckExit())
-			Game::G::Get().DoExit();
+		if (G::Get().CheckExit())
+			G::Get().DoExit();
 	}
 
-	Game::G::Get().FinalCleanup();
+	G::Get().FinalCleanup();
 }
 

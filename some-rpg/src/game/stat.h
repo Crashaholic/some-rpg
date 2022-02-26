@@ -1,12 +1,11 @@
 #ifndef STAT_H
 #define STAT_H
 #include "serializable.h"
-#include "statmod.h"
 
 namespace Game
 {
     template <typename T>
-	struct Stat : Serializable
+	struct Stat : Serializing::Serializable
 	{
 		T rawCurrent;
 		T maximum;

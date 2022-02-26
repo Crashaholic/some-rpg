@@ -46,26 +46,46 @@
 #define PLATFORM_WINDOWS
 #include <windows.h>
 #include <conio.h>
-HANDLE wHnd;
-HANDLE rHnd;
 
 #endif
 
 using std::string;
-namespace fs = std::__fs::filesystem;
-using fs::path;
 
 // GLOBAL VALUES, DO NOT MODIFY UNLESS NEEDED
 #define WINDOW_WIDTH 80
 #define WINDOW_HEIGHT 35
 
+#if defined(PLATFORM_LINUX)
+namespace fs = std::__fs::filesystem;
+#elif defined(PLATFORM_WINDOWS)
+namespace fs = std::filesystem;
+#endif
+using fs::path;
 
-namespace PlatformSystem
+class PlatformSystem
 {
+private:
+	PlatformSystem()
+	{
+	}
+
+	PlatformSystem(const PlatformSystem& copy) = delete;
+	PlatformSystem& operator=(const PlatformSystem& copy) = delete;
+
+
+public:
+
+	static PlatformSystem& Get()
+	{
+		static PlatformSystem p;
+		return p;
+	}
 
 #if defined(PLATFORM_LINUX)
-    static WINDOW* mainWindow = nullptr;
+	WINDOW* mainWindow = nullptr;
 #elif defined(PLATFORM_WINDOWS)
+	HANDLE wHnd;
+	HANDLE rHnd;
 	SMALL_RECT windowSize = { 0, 0, WINDOW_WIDTH - 1, WINDOW_HEIGHT - 1 };
 	COORD bufferSize = { WINDOW_WIDTH, WINDOW_HEIGHT };
 	COORD characterBufferSize = { WINDOW_WIDTH, WINDOW_HEIGHT };
@@ -101,7 +121,7 @@ namespace PlatformSystem
 
 #endif
 
-	static void SetupDrawing()
+	void SetupDrawing()
 	{
 		#if defined(PLATFORM_LINUX)
 			initscr();
@@ -141,7 +161,7 @@ namespace PlatformSystem
 		#endif
 	}
 
-	static void DrawAt(char chToDraw, int x, int y)
+	void DrawAt(char chToDraw, int x, int y)
 	{
 		#if defined(PLATFORM_LINUX)
 			// use ncurses to compile and draw
@@ -153,7 +173,7 @@ namespace PlatformSystem
 		#endif
 	}
 
-	static void DrawString(string st, int x, int y)
+	void DrawString(string st, int x, int y)
 	{
 		// this if check is to see if the whole string would fit within the window
 	    if (x + st.length() > WINDOW_WIDTH || x < 0 || y > WINDOW_HEIGHT || y < 0)
@@ -180,7 +200,7 @@ namespace PlatformSystem
 	#endif
 
 	//TODO: POSSIBLE REDO KEY HANDLING FOR LINUX SIDE
-	static void ReadInput()
+	void ReadInput()
 	{
 		#if defined(PLATFORM_LINUX)
             int ch;
@@ -207,7 +227,7 @@ namespace PlatformSystem
 	/**
 
 	*/
-	static void Render()
+	void Render()
 	{
 		#if defined(PLATFORM_LINUX)
 			refresh();
@@ -216,16 +236,18 @@ namespace PlatformSystem
 		#endif
 	}
 
-	static bool IsKeyPressed(int ch)
+	bool IsKeyPressed(int ch)
 	{
 	    #if defined (PLATFORM_LINUX)
 	    return linuxKeysJustDown[ch];
         #elif defined (PLATFORM_WINDOWS)
         // something to go here on dinwows
+		//return ((GetAsyncKeyState(ch) & 0x8001) != 0);
+		return windowsKeyMapOldFrame[ch] != windowsKeyMapNewFrame[ch];
         #endif
 	}
 
-	static void NewFrame()
+	void NewFrame()
 	{
 	    #if defined (PLATFORM_LINUX)
 	    clear();
@@ -234,7 +256,7 @@ namespace PlatformSystem
 	    #endif
 	}
 
-	static void EndFrame()
+	void EndFrame()
 	{
         #if defined(PLATFORM_LINUX)
             // TODO: maybe correct this?
@@ -248,11 +270,11 @@ namespace PlatformSystem
         #endif
 	}
 
-	static void ExitGame()
+	void ExitGame()
 	{
 	    #if defined(PLATFORM_LINUX)
             endwin();
 	    #endif
 	}
-}
+};
 #endif // SYSWRAP_H

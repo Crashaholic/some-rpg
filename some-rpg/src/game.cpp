@@ -9,20 +9,20 @@ void Game::G::Splash()
 void Game::G::Update()
 {
 
-	PlatformSystem::ReadInput();
+	PlatformSystem::Get().ReadInput();
 	switch (currentGameState)
 	{
 		case GameState::MAIN_MENU:
 			{
-				PlatformSystem::DrawAt('G', 0, 0);
-				PlatformSystem::DrawAt('r', 1, 0);
-				PlatformSystem::DrawAt('e', 2, 0);
-				PlatformSystem::DrawAt('m', 3, 0);
-				PlatformSystem::DrawAt('s', 4, 0);
-				PlatformSystem::DrawAt('p', 5, 0);
-				PlatformSystem::DrawAt('o', 6, 0);
+				PlatformSystem::Get().DrawAt('G', 0, 0);
+				PlatformSystem::Get().DrawAt('r', 1, 0);
+				PlatformSystem::Get().DrawAt('e', 2, 0);
+				PlatformSystem::Get().DrawAt('m', 3, 0);
+				PlatformSystem::Get().DrawAt('s', 4, 0);
+				PlatformSystem::Get().DrawAt('p', 5, 0);
+				PlatformSystem::Get().DrawAt('o', 6, 0);
 
-				PlatformSystem::DrawString("abcdef", 0, 3);
+				PlatformSystem::Get().DrawString("abcdef", 0, 3);
 				break;
 			}
 		default:
@@ -34,12 +34,12 @@ void Game::G::Update()
 
 void Game::G::Draw()
 {
-	PlatformSystem::Render();
+	PlatformSystem::Get().Render();
 }
 
 bool Game::G::CheckExit()
 {
-	if (PlatformSystem::IsKeyPressed('p'))
+	if (PlatformSystem::Get().IsKeyPressed('p'))
 	{
 		return true;
 	}
@@ -58,6 +58,6 @@ void Game::G::DoExit()
 
 void Game::G::FinalCleanup()
 {
-	PlatformSystem::ExitGame();
+	PlatformSystem::Get().ExitGame();
 }
 
