@@ -9,10 +9,7 @@ namespace Game
 {
 	class G
 	{
-		G()
-		{
-
-		}
+		G() : currentGameState(GameState::MAIN_MENU) {}
 		G(const G& copy) = delete;
 		G operator=(const G& copy) = delete;
 

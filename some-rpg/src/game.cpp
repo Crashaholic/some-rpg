@@ -23,6 +23,10 @@ void Game::G::Update()
 				PlatformSystem::Get().DrawAt('o', 6, 0);
 
 				PlatformSystem::Get().DrawString("abcdef", 0, 3);
+				if (PlatformSystem::Get().IsKeyPressed('A'))
+				{
+					PlatformSystem::Get().DrawAt('a', 0, 2);
+				}
 				break;
 			}
 		default:

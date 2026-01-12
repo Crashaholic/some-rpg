@@ -26,7 +26,7 @@
 #include <fstream>
 #include <random>
 #include <ctime>
-#include <filesystem>
+// #include <filesystem>
 #include <unordered_map>
 
 #if defined(__unix__)
@@ -42,6 +42,7 @@
 #elif defined(_WIN32)
 // ref and/or src:
 //		https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
+//		https://www.benryves.com/tutorials/winconsole/
 
 #define PLATFORM_WINDOWS
 #include <windows.h>
@@ -52,6 +53,7 @@
 using std::string;
 
 // GLOBAL VALUES, DO NOT MODIFY UNLESS NEEDED
+// WIDTH AND HEIGHT ARE BASED ON NUMBER OF CHARACTERS
 #define WINDOW_WIDTH 80
 #define WINDOW_HEIGHT 35
 
@@ -62,6 +64,10 @@ namespace fs = std::filesystem;
 #endif
 using fs::path;
 
+/**
+	\class PlatformSystem
+	A Singleton class to abstract away functions to work on either platforms.
+*/
 class PlatformSystem
 {
 private:
@@ -71,7 +77,6 @@ private:
 
 	PlatformSystem(const PlatformSystem& copy) = delete;
 	PlatformSystem& operator=(const PlatformSystem& copy) = delete;
-
 
 public:
 
@@ -83,6 +88,9 @@ public:
 
 #if defined(PLATFORM_LINUX)
 	WINDOW* mainWindow = nullptr;
+
+
+
 #elif defined(PLATFORM_WINDOWS)
 	HANDLE wHnd;
 	HANDLE rHnd;
@@ -121,73 +129,11 @@ public:
 
 #endif
 
-	void SetupDrawing()
-	{
-		#if defined(PLATFORM_LINUX)
-			initscr();
-			raw();
-			keypad(stdscr, TRUE);
-			noecho();
-            curs_set(FALSE);
-            cbreak();
-            timeout(0);
-			// TODO: SETUP AN NCURSES WINDOW WITH WINDOW_WIDTH AND WINDOW_HEIGHT
-            mainWindow = newwin(WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0);
+	void SetupDrawing();
 
+	void DrawAt(char chToDraw, int x, int y);
 
-		#elif defined(PLATFORM_WINDOWS)
-			wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
-			rHnd = GetStdHandle(STD_INPUT_HANDLE);
-			SetConsoleTitle(TEXT("some-rpg"));
-
-			/* Set the window size */
-			SetConsoleWindowInfo(wHnd, TRUE, &windowSize);
-			/* Set the screen's buffer size */
-			SetConsoleScreenBufferSize(wHnd, bufferSize);
-
-			//for (int y = 0; y < WINDOW_HEIGHT; ++y)
-			//{
-			//	for (int x = 0; x < WINDOW_WIDTH; ++x)
-			//	{
-			//		consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = (unsigned char)219;
-			//		consoleBuffer[x + WINDOW_WIDTH * y].Attributes = rand() % 256;
-			//
-			//}
-
-
-			/* Write our character buffer (a single character currently) to the console buffer */
-			//WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
-
-		#endif
-	}
-
-	void DrawAt(char chToDraw, int x, int y)
-	{
-		#if defined(PLATFORM_LINUX)
-			// use ncurses to compile and draw
-			mvaddch(y, x, chToDraw);
-
-		#elif defined(PLATFORM_WINDOWS)
-			// use WIN API to compile and draw
-			consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = chToDraw;
-		#endif
-	}
-
-	void DrawString(string st, int x, int y)
-	{
-		// this if check is to see if the whole string would fit within the window
-	    if (x + st.length() > WINDOW_WIDTH || x < 0 || y > WINDOW_HEIGHT || y < 0)
-	    {
-	        #if defined (PLATFORM_LINUX)
-				for (ssize_t i = 0; i < st.length(); ++i)
-				{
-					mvaddch(y, x + i, st[i]);
-				}
-            #elif defined (PLATFORM_WINDOWS)
-            // TODO: THIS SHITE
-            #endif
-	    }
-	}
+	void DrawString(string st, int x, int y);
 
 	#if defined(PLATFORM_LINUX)
         typedef std::unordered_map<int, bool> LinuxKeyMap;
@@ -199,82 +145,16 @@ public:
 		WindowsKeyMap windowsKeyMapNewFrame;
 	#endif
 
-	//TODO: POSSIBLE REDO KEY HANDLING FOR LINUX SIDE
-	void ReadInput()
-	{
-		#if defined(PLATFORM_LINUX)
-            int ch;
-			while ((ch = getch()) != ERR)
-                linuxKeysJustDown[ch] = true;
-		#elif defined(PLATFORM_WINDOWS)
-			DWORD numEventsRead = GetInput(&eventBuffer);
+	void ReadInput();
 
-			if (numEventsRead)
-			{
-				for (int i = 0; i < numEventsRead; ++i)
-				{
-					if (eventBuffer[i].EventType == KEY_EVENT)
-					{
-						windowsKeyMapNewFrame[eventBuffer[i].Event.KeyEvent.wVirtualKeyCode] = eventBuffer[i].Event.KeyEvent.bKeyDown;
-					}
-				}
-				free(eventBuffer);
-			}
-		#endif
+	void Render();
 
-	}
+	bool IsKeyPressed(int ch);
 
-	/**
+	void NewFrame();
 
-	*/
-	void Render()
-	{
-		#if defined(PLATFORM_LINUX)
-			refresh();
-		#elif defined(PLATFORM_WINDOWS)
-			WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
-		#endif
-	}
+	void EndFrame();
 
-	bool IsKeyPressed(int ch)
-	{
-	    #if defined (PLATFORM_LINUX)
-	    return linuxKeysJustDown[ch];
-        #elif defined (PLATFORM_WINDOWS)
-        // something to go here on dinwows
-		//return ((GetAsyncKeyState(ch) & 0x8001) != 0);
-		return windowsKeyMapOldFrame[ch] != windowsKeyMapNewFrame[ch];
-        #endif
-	}
-
-	void NewFrame()
-	{
-	    #if defined (PLATFORM_LINUX)
-	    clear();
-	    #elif defined (PLATFORM_WINDOWS)
-        // something to go here on dinwows
-	    #endif
-	}
-
-	void EndFrame()
-	{
-        #if defined(PLATFORM_LINUX)
-            // TODO: maybe correct this?
-            for (auto& key : linuxKeysJustDown)
-            {
-                linuxKeys[key.first] = key.second;
-                key.second = false;
-            }
-        #elif defined(PLATFORM_WINDOWS)
-
-        #endif
-	}
-
-	void ExitGame()
-	{
-	    #if defined(PLATFORM_LINUX)
-            endwin();
-	    #endif
-	}
+	void ExitGame();
 };
 #endif // SYSWRAP_H
