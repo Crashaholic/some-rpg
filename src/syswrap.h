@@ -38,6 +38,18 @@
 #include <ncurses.h>
 #include <curses.h>
 
+#define CLR_BLK COLOR_BLACK
+
+#define CLR_RED COLOR_RED
+#define CLR_GRN COLOR_GREEN
+#define CLR_YLW COLOR_YELLOW
+
+#define CLR_BLU COLOR_BLUE
+#define CLR_MAG COLOR_MAGENTA
+#define CLR_CYN COLOR_CYAN
+
+#define CLR_WHT COLOR_WHITE
+
 #elif defined(_WIN32)
 // ref and/or src:
 //		https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
@@ -46,6 +58,18 @@
 #define PLATFORM_WINDOWS
 #include <windows.h>
 #include <conio.h>
+
+#define CLR_BLK 
+
+#define CLR_RED FOREGROUND_RED
+#define CLR_GRN FOREGROUND_GREEN 
+#define CLR_BLU FOREGROUND_BLUE
+
+#define CLR_MAG CLR_RED | CLR_BLU
+#define CLR_YLW CLR_RED | CLR_GRN
+#define CLR_CYN CLR_BLU | CLR_GRN
+
+#define CLR_WHT CLR_RED | CLR_GRN | CLR_BLU
 
 #endif
 
@@ -127,6 +151,7 @@ public:
 
 	void SetupDrawing();
 	void DrawAt(char chToDraw, int x, int y);
+	void DrawAt(char chToDraw, int color, int x, int y);
 	void DrawString(string st, int x, int y);
 
 	void ReadInput();

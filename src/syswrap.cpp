@@ -30,7 +30,7 @@ void PlatformSystem::SetupDrawing()
 		for (int x = 0; x < WINDOW_WIDTH; ++x)
 		{
 			consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = (unsigned char)32;
-			consoleBuffer[x + WINDOW_WIDTH * y].Attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+			consoleBuffer[x + WINDOW_WIDTH * y].Attributes = CLR_WHT;
 		}
 	}
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
