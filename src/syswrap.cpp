@@ -61,10 +61,8 @@ void PlatformSystem::DrawString(string st, int x, int y)
 		mvaddch(y, x + i, st[i]);
 	}
 #elif defined (PLATFORM_WINDOWS)
-	// TODO: THIS
 	for (size_t i = 0; i < st.length(); ++i)
 	{
-		//mvaddch(y, x + i, st[i]);
 		DrawAt(st[i], x + i, y);
 	}
 #endif
@@ -93,11 +91,9 @@ void PlatformSystem::ReadInput()
 	//	}
 	//	free(eventBuffer);
 	//}
-
-
 #endif
-
 }
+
 void PlatformSystem::Render()
 {
 #if defined(PLATFORM_LINUX)
