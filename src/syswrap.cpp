@@ -32,16 +32,10 @@ void PlatformSystem::SetupDrawing()
 	{
 		for (int x = 0; x < WINDOW_WIDTH; ++x)
 		{
-			// consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = (unsigned char)219;
-			// consoleBuffer[x + WINDOW_WIDTH * y].Attributes = rand() % 256;
-
 			consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = (unsigned char)32;
-			consoleBuffer[x + WINDOW_WIDTH * y].Attributes = 0x01 | 0x02 | 0x04;
+			consoleBuffer[x + WINDOW_WIDTH * y].Attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 		}
 	}
-
-
-	/* Write our character buffer (a single character currently) to the console buffer */
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
 
 #endif
@@ -87,6 +81,8 @@ void PlatformSystem::ReadInput()
 	while ((ch = getch()) != ERR)
 		linuxKeysJustDown[ch] = true;
 #elif defined(PLATFORM_WINDOWS)
+	// what the heck was i doing with this back then this looks vibe-coded as hayle :wilted_rose:
+
 	//DWORD numEventsRead = GetInput(&eventBuffer);
 
 	//if (numEventsRead)

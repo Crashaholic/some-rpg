@@ -22,7 +22,7 @@ void Game::G::Update()
 				PlatformSystem::Get().DrawAt('p', 5, 0);
 				PlatformSystem::Get().DrawAt('o', 6, 0);
 
-				PlatformSystem::Get().DrawString("abcdef", 0, 3);
+				PlatformSystem::Get().DrawString("Start", 1, 3);
 				if (PlatformSystem::Get().IsKeyPressed('A'))
 				{
 					PlatformSystem::Get().DrawAt('a', 0, 2);
