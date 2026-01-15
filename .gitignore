@@ -5,6 +5,7 @@
 *.depend
 
 bin/
+build/
 obj/
 
 CMakeCache.txt
