@@ -26,7 +26,6 @@
 #include <fstream>
 #include <random>
 #include <ctime>
-// #include <filesystem>
 #include <unordered_map>
 
 #if defined(__unix__)
@@ -57,13 +56,6 @@ using std::string;
 #define WINDOW_WIDTH 80
 #define WINDOW_HEIGHT 35
 
-#if defined(PLATFORM_LINUX)
-namespace fs = std::__fs::filesystem;
-#elif defined(PLATFORM_WINDOWS)
-namespace fs = std::filesystem;
-#endif
-using fs::path;
-
 /**
 	\class PlatformSystem
 	A Singleton class to abstract away functions to work on either platforms.
@@ -88,8 +80,9 @@ public:
 
 #if defined(PLATFORM_LINUX)
 	WINDOW* mainWindow = nullptr;
-
-
+        typedef std::unordered_map<int, bool> LinuxKeyMap;
+        LinuxKeyMap linuxKeys;
+        LinuxKeyMap linuxKeysJustDown;
 
 #elif defined(PLATFORM_WINDOWS)
 	HANDLE wHnd;
@@ -126,35 +119,21 @@ public:
 		/* Return the amount of events successfully read */
 		return numEventsRead;
 	}
+	typedef std::unordered_map<WORD, bool> WindowsKeyMap;
+	WindowsKeyMap windowsKeyMapOldFrame;
+	WindowsKeyMap windowsKeyMapNewFrame;
 
 #endif
 
 	void SetupDrawing();
-
 	void DrawAt(char chToDraw, int x, int y);
-
 	void DrawString(string st, int x, int y);
 
-	#if defined(PLATFORM_LINUX)
-        typedef std::unordered_map<int, bool> LinuxKeyMap;
-        static LinuxKeyMap linuxKeys;
-        static LinuxKeyMap linuxKeysJustDown;
-	#elif defined(PLATFORM_WINDOWS)
-		typedef std::unordered_map<WORD, bool> WindowsKeyMap;
-        WindowsKeyMap windowsKeyMapOldFrame;
-		WindowsKeyMap windowsKeyMapNewFrame;
-	#endif
-
 	void ReadInput();
-
 	void Render();
-
 	bool IsKeyPressed(int ch);
-
 	void NewFrame();
-
 	void EndFrame();
-
 	void ExitGame();
 };
 #endif // SYSWRAP_H

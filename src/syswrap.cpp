@@ -1,6 +1,4 @@
 #include "syswrap.h"
-
-
 /**
 
 */
@@ -16,7 +14,6 @@ void PlatformSystem::SetupDrawing()
 	timeout(0);
 	// TODO: SETUP AN NCURSES WINDOW WITH WINDOW_WIDTH AND WINDOW_HEIGHT
 	mainWindow = newwin(WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0);
-
 
 #elif defined(PLATFORM_WINDOWS)
 	wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
