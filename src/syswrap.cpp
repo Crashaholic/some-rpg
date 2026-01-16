@@ -69,7 +69,6 @@ void PlatformSystem::DrawString(string st, int x, int y)
 	// TODO: THIS
 	for (size_t i = 0; i < st.length(); ++i)
 	{
-		//mvaddch(y, x + i, st[i]);
 		DrawAt(st[i], x + i, y);
 	}
 #endif
@@ -98,8 +97,8 @@ void PlatformSystem::ReadInput()
 	// what the heck was i doing with this back then this looks vibe-coded as hayle :wilted_rose:
 
 #endif
-
 }
+
 void PlatformSystem::Render()
 {
 #ifdef PLATFORM_LINUX
