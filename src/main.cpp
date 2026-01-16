@@ -1,4 +1,4 @@
-#include "game.h"
+#include "game/game.h"
 
 using Game::G;
 
@@ -10,7 +10,6 @@ int main(int argc, char** args)
 	{
 		G::Get().Update();
 		G::Get().Draw();
-		//Game::GetInput(); // TODO: FIX THIS
 		if (G::Get().CheckExit())
 			G::Get().DoExit();
 	}

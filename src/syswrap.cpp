@@ -1,10 +1,8 @@
 #include "syswrap.h"
-/**
 
-*/
 void PlatformSystem::SetupDrawing()
 {
-#if defined(PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	initscr();
 	raw();
 	keypad(stdscr, TRUE);
@@ -12,10 +10,15 @@ void PlatformSystem::SetupDrawing()
 	curs_set(FALSE);
 	cbreak();
 	timeout(0);
+	start_color();
+
+	// TODO: ncurses color pairs
+
+
 	// TODO: SETUP AN NCURSES WINDOW WITH WINDOW_WIDTH AND WINDOW_HEIGHT
 	mainWindow = newwin(WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0);
-
-#elif defined(PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 	wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
 	rHnd = GetStdHandle(STD_INPUT_HANDLE);
 	SetConsoleTitle(TEXT("some-rpg"));
@@ -30,13 +33,14 @@ void PlatformSystem::SetupDrawing()
 		for (int x = 0; x < WINDOW_WIDTH; ++x)
 		{
 			consoleBuffer[x + WINDOW_WIDTH * y].Char.AsciiChar = (unsigned char)32;
-			consoleBuffer[x + WINDOW_WIDTH * y].Attributes = CLR_WHT;
+			consoleBuffer[x + WINDOW_WIDTH * y].Attributes = COL_WHT;
 		}
 	}
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
 
 #endif
 }
+
 void PlatformSystem::DrawAt(char chToDraw, int x, int y)
 {
 	// this if check is to see if the whole string would fit within the window
@@ -44,23 +48,24 @@ void PlatformSystem::DrawAt(char chToDraw, int x, int y)
 	{
 		return;
 	}
-#if defined(PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	// use ncurses to compile and draw
 	mvaddch(y, x, chToDraw);
-
-#elif defined(PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 	// use WIN API to compile and draw
 	consoleBuffer[y * WINDOW_WIDTH + x].Char.AsciiChar = chToDraw;
 #endif
 }
 void PlatformSystem::DrawString(string st, int x, int y)
 {
-#if defined (PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	for (ssize_t i = 0; i < st.length(); ++i)
 	{
 		mvaddch(y, x + i, st[i]);
 	}
-#elif defined (PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 	// TODO: THIS
 	for (size_t i = 0; i < st.length(); ++i)
 	{
@@ -70,39 +75,37 @@ void PlatformSystem::DrawString(string st, int x, int y)
 #endif
 }
 
+void PlatformSystem::DrawAt(char chToDraw, int color, int x, int y)
+{
+#ifdef PLATFORM_LINUX
+	// TODO: ncurses
+#endif
+#ifdef PLATFORM_WINDOWS
+	consoleBuffer[y * WINDOW_WIDTH + x].Char.AsciiChar = chToDraw;
+	consoleBuffer[y * WINDOW_WIDTH + x].Attributes = color;
+#endif
+}
+
 //TODO: POSSIBLE REDO KEY HANDLING FOR LINUX SIDE
 void PlatformSystem::ReadInput()
 {
-#if defined(PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	int ch;
 	while ((ch = getch()) != ERR)
 		linuxKeysJustDown[ch] = true;
-#elif defined(PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 	// what the heck was i doing with this back then this looks vibe-coded as hayle :wilted_rose:
-
-	//DWORD numEventsRead = GetInput(&eventBuffer);
-
-	//if (numEventsRead)
-	//{
-	//	for (int i = 0; i < numEventsRead; ++i)
-	//	{
-	//		if (eventBuffer[i].EventType == KEY_EVENT)
-	//		{
-	//			windowsKeyMapNewFrame[eventBuffer[i].Event.KeyEvent.wVirtualKeyCode] = eventBuffer[i].Event.KeyEvent.bKeyDown;
-	//		}
-	//	}
-	//	free(eventBuffer);
-	//}
-
 
 #endif
 
 }
 void PlatformSystem::Render()
 {
-#if defined(PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	refresh();
-#elif defined(PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
 #endif
 }
@@ -110,10 +113,22 @@ void PlatformSystem::Render()
 
 bool PlatformSystem::IsKeyPressed(int ch)
 {
-#if defined (PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	return linuxKeysJustDown[ch];
-#elif defined (PLATFORM_WINDOWS)
-	return ((GetAsyncKeyState(ch) & 0x8001) != 0);
+#endif
+#ifdef PLATFORM_WINDOWS
+
+	int chr = ch;
+	if (chr >= 65 && chr <= 90)
+	{
+		chr += 32;
+	}
+	else if (chr >= 97 && chr <= 122)
+	{
+		chr -= 32;
+	}
+
+	return ((GetAsyncKeyState(chr) & 0x8001) != 0);
 	//return windowsKeyMapOldFrame[ch] != windowsKeyMapNewFrame[ch];
 #endif
 }
@@ -121,9 +136,10 @@ bool PlatformSystem::IsKeyPressed(int ch)
 
 void PlatformSystem::NewFrame()
 {
-#if defined (PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	clear();
-#elif defined (PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 	// something to go here on dinwows
 	// GetInput();
 #endif
@@ -131,23 +147,25 @@ void PlatformSystem::NewFrame()
 
 void PlatformSystem::EndFrame()
 {
-#if defined(PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	// TODO: maybe correct this?
 	for (auto& key : linuxKeysJustDown)
 	{
 		linuxKeys[key.first] = key.second;
 		key.second = false;
 	}
-#elif defined(PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 
 #endif
 }
 
 void PlatformSystem::ExitGame()
 {
-#if defined(PLATFORM_LINUX)
+#ifdef PLATFORM_LINUX
 	endwin();
-#elif defined(PLATFORM_WINDOWS)
+#endif
+#ifdef PLATFORM_WINDOWS
 	// TODO: WINDOWS CLEANUP
 #endif
 }

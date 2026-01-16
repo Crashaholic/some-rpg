@@ -1,6 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-#include "syswrap.h"
+#include "../syswrap.h"
 //#include "game/entity.h"
 //#include "game/biome.h"
 //#include "gamepackage.h"

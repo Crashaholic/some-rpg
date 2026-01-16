@@ -23,7 +23,7 @@ void Game::G::Update()
 				PlatformSystem::Get().DrawAt('o', 6, 0);
 
 				PlatformSystem::Get().DrawString("Start", 1, 3);
-				if (PlatformSystem::Get().IsKeyPressed('A'))
+				if (PlatformSystem::Get().IsKeyPressed('a'))
 				{
 					PlatformSystem::Get().DrawAt('a', 0, 2);
 				}
