@@ -1,5 +1,7 @@
 #include "game.h"
 
+PlatformSystem& p = PlatformSystem::Get();
+
 void Game::G::Splash()
 {
 	srand(time(NULL));
@@ -9,23 +11,29 @@ void Game::G::Splash()
 void Game::G::Update()
 {
 
-	PlatformSystem::Get().ReadInput();
+	p.ReadInput();
 	switch (currentGameState)
 	{
 		case GameState::MAIN_MENU:
 			{
-				PlatformSystem::Get().DrawAt('G', 0, 0);
-				PlatformSystem::Get().DrawAt('r', 1, 0);
-				PlatformSystem::Get().DrawAt('e', 2, 0);
-				PlatformSystem::Get().DrawAt('m', 3, 0);
-				PlatformSystem::Get().DrawAt('s', 4, 0);
-				PlatformSystem::Get().DrawAt('p', 5, 0);
-				PlatformSystem::Get().DrawAt('o', 6, 0);
+				p.DrawAt(220, 1, 1);
+				p.DrawAt(223, 2, 1);
+				p.DrawAt(223, 3, 1);
+				p.DrawAt(220, 4, 1);
+				p.DrawAt(219, 1, 2);
+				p.DrawAt(219, 1, 3);
+				p.DrawAt(223, 3, 3);
+				p.DrawAt(219, 4, 3);
+				p.DrawAt(223, 1, 4);
+				p.DrawAt(220, 2, 4);
+				p.DrawAt(220, 3, 4);
+				p.DrawAt(223, 4, 4);
+				p.DrawString("R E M S P O", 6, 4);
 
-				PlatformSystem::Get().DrawString("Start", 1, 3);
-				if (PlatformSystem::Get().IsKeyPressed('a'))
+				p.DrawString("Start", 1, 6);
+				if (p.IsKeyPressed('a'))
 				{
-					PlatformSystem::Get().DrawAt('a', 0, 2);
+					p.DrawAt('a', 0, 2);
 				}
 				break;
 			}
@@ -38,12 +46,12 @@ void Game::G::Update()
 
 void Game::G::Draw()
 {
-	PlatformSystem::Get().Render();
+	p.Render();
 }
 
 bool Game::G::CheckExit()
 {
-	if (PlatformSystem::Get().IsKeyPressed('p'))
+	if (p.IsKeyPressed('p'))
 	{
 		return true;
 	}
@@ -62,6 +70,6 @@ void Game::G::DoExit()
 
 void Game::G::FinalCleanup()
 {
-	PlatformSystem::Get().ExitGame();
+	p.ExitGame();
 }
 
