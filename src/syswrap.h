@@ -41,7 +41,9 @@
 
 #elif defined(_WIN32)
 // ref and/or src:
-//		https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
+//		https://web.archive.org/web/20171205221811/https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
+//		https://web.archive.org/web/20171027152830/http://cecilsunkure.blogspot.com/2011/12/windows-console-game-painters-algorithm.html
+//		https://github.com/RandyGaul/AsciiEngine/tree/master/AsciiEngine
 //		https://www.benryves.com/tutorials/winconsole/
 
 #define PLATFORM_WINDOWS
@@ -87,9 +89,14 @@ public:
 	}
 
 #if defined(PLATFORM_LINUX)
+#elif defined(PLATFORM_WINDOWS)
+#endif
+
+#if defined(PLATFORM_LINUX)
 	WINDOW* mainWindow = nullptr;
-
-
+	typedef std::unordered_map<int, bool> LinuxKeyMap;
+	static LinuxKeyMap linuxKeys;
+	static LinuxKeyMap linuxKeysJustDown;
 
 #elif defined(PLATFORM_WINDOWS)
 	HANDLE wHnd;
@@ -103,6 +110,9 @@ public:
 	CHAR_INFO consoleBuffer[WINDOW_WIDTH * WINDOW_HEIGHT];
 
 	INPUT_RECORD* eventBuffer;
+	typedef std::unordered_map<WORD, bool> WindowsKeyMap;
+	WindowsKeyMap windowsKeyMapOldFrame;
+	WindowsKeyMap windowsKeyMapNewFrame;
 
 	/* Read console input buffer and return malloc'd INPUT_RECORD array */
 	DWORD GetInput(INPUT_RECORD** eventBuffer)
@@ -134,16 +144,6 @@ public:
 	void DrawAt(char chToDraw, int x, int y);
 
 	void DrawString(string st, int x, int y);
-
-	#if defined(PLATFORM_LINUX)
-        typedef std::unordered_map<int, bool> LinuxKeyMap;
-        static LinuxKeyMap linuxKeys;
-        static LinuxKeyMap linuxKeysJustDown;
-	#elif defined(PLATFORM_WINDOWS)
-		typedef std::unordered_map<WORD, bool> WindowsKeyMap;
-        WindowsKeyMap windowsKeyMapOldFrame;
-		WindowsKeyMap windowsKeyMapNewFrame;
-	#endif
 
 	void ReadInput();
 
