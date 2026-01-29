@@ -20,9 +20,14 @@ namespace Game
 			return g;
 		}
 
-		bool running = true;
+
+		/**
+		 * 
+		 */
 		enum class GameState
 		{
+			NONE, 
+
 			MAIN_MENU,
 			MAIN_MENU_NEW_GAME,
 			MAIN_MENU_LOAD_GAME,
@@ -33,24 +38,48 @@ namespace Game
 			// there is no end muahahaha
 		};
 
-		GameState currentGameState;
 
+		/**
+		 *  \brief 
+		 */
 		void Splash();
+		
+		/**
+		 *  \brief
+		 */
 		void Update();
 
 		/**
-		 * This will draw the things queued to draw.
+		 *  \brief This will draw the things queued to draw.
 		 */
 		void Draw();
-		bool isLeavingGame = false;
 
-		// exists to prevent any form of unwanted exits!
+		/** 
+		 *  \brief Check if the game is to exit.
+		 *	\return True if game is going to exit. False if not. 
+		 */
 		bool CheckExit();
 
+		/**
+		 *  \brief
+		 */
 		void DoExit();
 
+		/**
+		 *  \brief 
+		 */
 		void FinalCleanup();
 
+
+
+		/// \brief 
+		bool isLeavingGame = false;
+		
+		/// \brief
+		bool running = true;
+
+		/// \brief 
+		GameState currentGameState = GameState::NONE;
 	};
 
 }
