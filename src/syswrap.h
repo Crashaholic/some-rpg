@@ -53,7 +53,9 @@
 #endif
 #ifdef PLATFORM_WINDOWS
 // ref and/or src:
-//		https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
+//		https://web.archive.org/web/20171205221811/https://www.randygaul.net/2012/07/03/windows-console-game-asciiengine/
+//		https://web.archive.org/web/20171027152830/http://cecilsunkure.blogspot.com/2011/12/windows-console-game-painters-algorithm.html
+//		https://github.com/RandyGaul/AsciiEngine/tree/master/AsciiEngine
 //		https://www.benryves.com/tutorials/winconsole/
 
 	#include <windows.h>
@@ -101,6 +103,10 @@ public:
 		static PlatformSystem p;
 		return p;
 	}
+
+#if defined(PLATFORM_LINUX)
+#elif defined(PLATFORM_WINDOWS)
+#endif
 
 #if defined(PLATFORM_LINUX)
 	WINDOW* mainWindow = nullptr;
