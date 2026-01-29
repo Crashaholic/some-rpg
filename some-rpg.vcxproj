@@ -12,12 +12,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game\game.cpp" />
+    <ClCompile Include="src\game\scenes\mainmenu.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\syswrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\game\item.h" />
+    <ClInclude Include="src\game\scene.h" />
+    <ClInclude Include="src\game\scenes.h" />
+    <ClInclude Include="src\game\scenes\mainmenu.h" />
     <ClInclude Include="src\game\serializable.h" />
     <ClInclude Include="src\game\stat.h" />
     <ClInclude Include="src\game\uidgen.h" />

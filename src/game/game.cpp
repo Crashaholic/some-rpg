@@ -1,6 +1,7 @@
 #include "game.h"
 
 PlatformSystem& p = PlatformSystem::Get();
+// Game::Scene* currentScene;
 
 void Game::G::Splash()
 {
@@ -12,6 +13,7 @@ void Game::G::Update()
 {
 
 	p.ReadInput();
+	// currentScene->Update();
 	switch (currentGameState)
 	{
 		case GameState::MAIN_MENU:
@@ -34,6 +36,10 @@ void Game::G::Update()
 				if (p.IsKeyPressed('a'))
 				{
 					p.DrawAt('a', 0, 2);
+				}
+				else
+				{
+					p.DrawAt(' ', 0, 2);
 				}
 				break;
 			}
