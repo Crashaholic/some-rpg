@@ -4,16 +4,16 @@ using Game::G;
 
 int main(int argc, char** args)
 {
-	PlatformSystem::Get().SetupDrawing();
-	G::Get().Splash();
-	while (G::Get().running)
+	Game::G g;
+	g.Splash();
+	while (g.running)
 	{
-		G::Get().Update();
-		G::Get().Draw();
-		if (G::Get().CheckExit())
-			G::Get().DoExit();
+		g.Update();
+		g.Draw();
+		if (g.CheckExit())
+			g.DoExit();
 	}
 
-	G::Get().FinalCleanup();
+	g.FinalCleanup();
 }
 

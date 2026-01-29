@@ -9,16 +9,20 @@ namespace Game
 {
 	class G
 	{
-		G() : currentGameState(GameState::MAIN_MENU) {}
-		G(const G& copy) = delete;
-		G operator=(const G& copy) = delete;
+		// G(const G& copy) = delete;
+		// G operator=(const G& copy) = delete;
 
 		public:
-		static G& Get()
+		G() 
+		: currentGameState(GameState::MAIN_MENU) 
 		{
-			static G g;
-			return g;
+
 		}
+		// static G& Get()
+		// {
+		// 	static G g;
+		// 	return g;
+		// }
 
 
 		/**

@@ -9,7 +9,8 @@ namespace Game
 	{
 
 	public:
-		void Update() override;
+		/// @brief 
+		void Update(PlatformSystem& p) override;
 		// void Draw() override;
 	private:
 		int m_iSelector;

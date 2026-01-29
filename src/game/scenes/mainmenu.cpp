@@ -1,9 +1,7 @@
 #include "mainmenu.h"
 
-void Game::Scene_MainMenu::Update()
-{
-}
+#include "../../syswrap.h"
 
-void Game::Scene_MainMenu::Draw()
+void Game::Scene_MainMenu::Update(PlatformSystem& p)
 {
 }

@@ -84,29 +84,25 @@ using std::string;
 
 /**
 	\class PlatformSystem
-	A Singleton class to abstract away functions to work on either platforms.
+	\brief asdf
 */
 class PlatformSystem
 {
 private:
-	PlatformSystem()
-	{
-	}
 
-	PlatformSystem(const PlatformSystem& copy) = delete;
-	PlatformSystem& operator=(const PlatformSystem& copy) = delete;
+	// PlatformSystem(const PlatformSystem& copy) = delete;
+	// PlatformSystem& operator=(const PlatformSystem& copy) = delete;
 
 public:
 
-	static PlatformSystem& Get()
+	PlatformSystem()
 	{
-		static PlatformSystem p;
-		return p;
 	}
-
-#if defined(PLATFORM_LINUX)
-#elif defined(PLATFORM_WINDOWS)
-#endif
+	// static PlatformSystem& Get()
+	// {
+	// 	static PlatformSystem p;
+	// 	return p;
+	// }
 
 #if defined(PLATFORM_LINUX)
 	WINDOW* mainWindow = nullptr;
@@ -142,7 +138,12 @@ public:
 	/**
 	*
 	*/
-	void DrawAt(char chToDraw, int color, int x, int y);
+	void DrawAt(char chToDraw, int fgColor, int x, int y);
+	
+	/**
+	*
+	*/
+	void DrawAt(char chToDraw, int fgColor, int bgColor, int x, int y);
 	
 	/**
 	*

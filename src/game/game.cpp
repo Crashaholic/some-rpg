@@ -1,10 +1,13 @@
 #include "game.h"
 
-PlatformSystem& p = PlatformSystem::Get();
-// Game::Scene* currentScene;
+#include "scenes.h"
+
+PlatformSystem p = PlatformSystem();
+Game::Scene* currentScene;
 
 void Game::G::Splash()
 {
+	p.SetupDrawing();
 	srand(time(NULL));
 	currentGameState = GameState::MAIN_MENU;
 }
@@ -13,7 +16,7 @@ void Game::G::Update()
 {
 
 	p.ReadInput();
-	// currentScene->Update();
+	currentScene->Update(p);
 	switch (currentGameState)
 	{
 		case GameState::MAIN_MENU:

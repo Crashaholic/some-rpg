@@ -1,15 +1,18 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "../syswrap.h"
+// #include "../syswrap.h"
 #include <string>
+
+// forward declare PlatformSystem
+class PlatformSystem;
 
 namespace Game 
 {
 	class Scene 
 	{
 	public:
-		virtual void Update() = 0;
+		virtual void Update(PlatformSystem& p) = 0;
 		// virtual void Draw() = 0;
 		std::string sceneChangeRequest;
 	};
