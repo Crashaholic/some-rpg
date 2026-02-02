@@ -1,11 +1,10 @@
 #pragma once
 
 #include "../scene.h"
-#include "../scenes.h"
 
 namespace Game 
 {
-	class Scene_MainMenu : public Scene 
+	class MainMenuScene : public Scene 
 	{
 
 	public:

@@ -13,8 +13,10 @@ namespace Game
 	{
 	public:
 		virtual void Update(PlatformSystem& p) = 0;
-		// virtual void Draw() = 0;
-		std::string sceneChangeRequest;
+
+		virtual void OnEnter() = 0;
+
+		virtual void OnExit() = 0;
 	};
 }
 

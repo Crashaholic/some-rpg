@@ -1,9 +1,9 @@
 #include "game.h"
 
-#include "scenes.h"
+#include "scenemanager.h"
 
 PlatformSystem p = PlatformSystem();
-Game::Scene* currentScene;
+SceneManager scnm = SceneManager();
 
 void Game::G::Splash()
 {
@@ -16,23 +16,23 @@ void Game::G::Update()
 {
 
 	p.ReadInput();
-	currentScene->Update(p);
+	scnm.Update(p);
 	switch (currentGameState)
 	{
 		case GameState::MAIN_MENU:
 			{
-				p.DrawAt(220, 1, 1);
-				p.DrawAt(223, 2, 1);
-				p.DrawAt(223, 3, 1);
-				p.DrawAt(220, 4, 1);
-				p.DrawAt(219, 1, 2);
-				p.DrawAt(219, 1, 3);
-				p.DrawAt(223, 3, 3);
-				p.DrawAt(219, 4, 3);
-				p.DrawAt(223, 1, 4);
-				p.DrawAt(220, 2, 4);
-				p.DrawAt(220, 3, 4);
-				p.DrawAt(223, 4, 4);
+				p.DrawAt(static_cast<char>(220), 1, 1);
+				p.DrawAt(static_cast<char>(223), 2, 1);
+				p.DrawAt(static_cast<char>(223), 3, 1);
+				p.DrawAt(static_cast<char>(220), 4, 1);
+				p.DrawAt(static_cast<char>(219), 1, 2);
+				p.DrawAt(static_cast<char>(219), 1, 3);
+				p.DrawAt(static_cast<char>(223), 3, 3);
+				p.DrawAt(static_cast<char>(219), 4, 3);
+				p.DrawAt(static_cast<char>(223), 1, 4);
+				p.DrawAt(static_cast<char>(220), 2, 4);
+				p.DrawAt(static_cast<char>(220), 3, 4);
+				p.DrawAt(static_cast<char>(223), 4, 4);
 				p.DrawString("R E M S P O", 6, 4);
 
 				p.DrawString("Start", 1, 6);

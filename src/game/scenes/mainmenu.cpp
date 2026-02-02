@@ -2,6 +2,6 @@
 
 #include "../../syswrap.h"
 
-void Game::Scene_MainMenu::Update(PlatformSystem& p)
+void Game::MainMenuScene::Update(PlatformSystem& p)
 {
 }
