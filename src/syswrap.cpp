@@ -57,6 +57,18 @@ void PlatformSystem::DrawAt(char chToDraw, int x, int y)
 	consoleBuffer[y * WINDOW_WIDTH + x].Char.AsciiChar = chToDraw;
 #endif
 }
+
+void PlatformSystem::DrawAt(char chToDraw, int color, int x, int y)
+{
+#ifdef PLATFORM_LINUX
+	// TODO: ncurses
+#endif
+#ifdef PLATFORM_WINDOWS
+	consoleBuffer[y * WINDOW_WIDTH + x].Char.AsciiChar = chToDraw;
+	consoleBuffer[y * WINDOW_WIDTH + x].Attributes = color;
+#endif
+}
+
 void PlatformSystem::DrawString(string st, int x, int y)
 {
 #ifdef PLATFORM_LINUX
@@ -71,17 +83,6 @@ void PlatformSystem::DrawString(string st, int x, int y)
 	{
 		DrawAt(st[i], x + i, y);
 	}
-#endif
-}
-
-void PlatformSystem::DrawAt(char chToDraw, int color, int x, int y)
-{
-#ifdef PLATFORM_LINUX
-	// TODO: ncurses
-#endif
-#ifdef PLATFORM_WINDOWS
-	consoleBuffer[y * WINDOW_WIDTH + x].Char.AsciiChar = chToDraw;
-	consoleBuffer[y * WINDOW_WIDTH + x].Attributes = color;
 #endif
 }
 

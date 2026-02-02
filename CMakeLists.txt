@@ -21,6 +21,8 @@ set (all_SRCS
     "${PROJECT_SOURCE_DIR}/src/game/serializable.h"
 )
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_executable(${TARGET_NAME} ${all_SRCS})
 target_compile_features(
     ${TARGET_NAME} 

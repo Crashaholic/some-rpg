@@ -5,7 +5,9 @@ obj/
 [Dd]ebug/
 [Mm]akefile
 CMakeFiles/
-
+.venv/
+.cache/
+.vscode/
 
 *.filters
 *.user

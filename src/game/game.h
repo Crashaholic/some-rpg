@@ -1,9 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 #include "../syswrap.h"
-//#include "game/entity.h"
-//#include "game/biome.h"
-//#include "gamepackage.h"
+
+// #include "game/entity.h"
+// #include "game/biome.h"
+// #include "gamepackage.h"
 
 namespace Game
 {
@@ -18,11 +19,6 @@ namespace Game
 		{
 
 		}
-		// static G& Get()
-		// {
-		// 	static G g;
-		// 	return g;
-		// }
 
 
 		/**
