@@ -10,7 +10,9 @@ void PlatformSystem::SetupDrawing()
 	curs_set(FALSE);
 	cbreak();
 	timeout(0);
-	start_color();
+	
+	if (has_colors())
+		start_color();
 
 	// TODO: ncurses color pairs
 
