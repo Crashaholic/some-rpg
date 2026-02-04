@@ -133,11 +133,6 @@ public:
 	/**
 	 *
 	 */
-	void Clear();
-
-	/**
-	 *
-	 */
 	void DrawAt(char chToDraw, int x, int y);
 	
 	/**

@@ -4,6 +4,11 @@
 #include "../scenemanager.h"
 #include "pregame.h"
 
+void MainMenuScene::OnEnter()
+{
+
+}
+
 void MainMenuScene::Update(SceneManager& scnm, PlatformSystem& p)
 {
 	p.DrawAt(static_cast<char>(220), 1, 1);
@@ -20,25 +25,17 @@ void MainMenuScene::Update(SceneManager& scnm, PlatformSystem& p)
 	p.DrawAt(static_cast<char>(223), 4, 4);
 	p.DrawString("R E M S P O", 6, 4);
 
-	p.DrawString("Start", 1, 6);
-	if (p.IsKeyPressed('a'))
+	p.DrawAt('>', 2, 6 + m_iSelector);
+	p.DrawString("Start", 3, 6);
+	if (p.IsKeyPressed('s'))
 	{
-		p.DrawAt('a', 0, 2);
-	}
-	else
-	{
-		p.DrawAt(' ', 0, 2);
+		p.DrawAt('s', 0, 2);
 	}
 
 	if (p.IsKeyPressed('b'))
 	{
 		scnm.ChangeScene(std::make_unique<PregameScene>());
 	}
-}
-
-void MainMenuScene::OnEnter()
-{
-
 }
 
 void MainMenuScene::OnExit()

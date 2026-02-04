@@ -43,18 +43,15 @@ void PlatformSystem::SetupDrawing()
 #endif
 }
 
-void PlatformSystem::Clear()
-{
-#ifdef PLATFORM_LINUX
-
-#endif
-#ifdef PLATFORM_WINDOWS
-	CHAR_INFO clear;
-	clear.Char.AsciiChar = ' ';
-	clear.Attributes = COL_WHT;
-	std::fill(std::begin(consoleBuffer), std::end(consoleBuffer), clear);
-#endif
-}
+// // TODO: rethink how this is called because oh my god my eyes
+// void PlatformSystem::Clear()
+// {
+// #ifdef PLATFORM_LINUX
+//
+// #endif
+// #ifdef PLATFORM_WINDOWS
+// #endif
+// }
 
 void PlatformSystem::DrawAt(char chToDraw, int x, int y)
 {
@@ -152,11 +149,15 @@ bool PlatformSystem::IsKeyPressed(int ch)
 void PlatformSystem::NewFrame()
 {
 #ifdef PLATFORM_LINUX
-	clear();
+	// clear();
 #endif
 #ifdef PLATFORM_WINDOWS
 	// something to go here on dinwows
 	// GetInput();
+	CHAR_INFO clear;
+	clear.Char.AsciiChar = ' ';
+	clear.Attributes = COL_WHT;
+	std::fill(std::begin(consoleBuffer), std::end(consoleBuffer), clear);
 #endif
 }
 
@@ -184,3 +185,4 @@ void PlatformSystem::ExitGame()
 	// TODO: WINDOWS CLEANUP
 #endif
 }
+

@@ -4,7 +4,6 @@
 #include "scenemanager.h"
 #include "scenes/mainmenu.h"
 
-
 PlatformSystem p = PlatformSystem();
 SceneManager scnm = SceneManager();
 
@@ -12,12 +11,13 @@ void Game::G::Splash()
 {
 	p.SetupDrawing();
 	srand(time(NULL));
-	currentGameState = GameState::MAIN_MENU;
 	scnm.ChangeScene(std::make_unique<MainMenuScene>());
 }
 
 void Game::G::Update()
 {
+	// TODO: come up with new strategy for screen clearing
+	p.NewFrame();
 	p.ReadInput();
 	scnm.Update(scnm, p);
 }
@@ -25,7 +25,6 @@ void Game::G::Update()
 void Game::G::Draw()
 {
 	p.Render();
-	p.Clear();
 }
 
 bool Game::G::CheckExit()
