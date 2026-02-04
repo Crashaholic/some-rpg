@@ -11,15 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\scenes\pregame.cpp" />
+    <ClCompile Include="src\game\scenemanager.cpp" />
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\game\scenes\mainmenu.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\syswrap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\game\scenes\pregame.h" />
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\game\item.h" />
     <ClInclude Include="src\game\scene.h" />
+    <ClInclude Include="src\game\scenemanager.h" />
     <ClInclude Include="src\game\scenes.h" />
     <ClInclude Include="src\game\scenes\mainmenu.h" />
     <ClInclude Include="src\game\serializable.h" />

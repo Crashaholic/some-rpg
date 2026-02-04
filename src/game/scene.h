@@ -6,13 +6,17 @@
 
 // forward declare PlatformSystem
 class PlatformSystem;
+// and SceneManager
+class SceneManager;
 
 namespace Game 
 {
 	class Scene 
 	{
 	public:
-		virtual void Update(PlatformSystem& p) = 0;
+		virtual ~Scene() = default;
+
+		virtual void Update(SceneManager& sceneManager, PlatformSystem& p) = 0;
 
 		virtual void OnEnter() = 0;
 

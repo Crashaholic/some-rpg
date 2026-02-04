@@ -4,13 +4,22 @@
 #include <memory>
 #include "scene.h"
 
-class SceneManager {
-	public:
-	void Update(PlatformSystem&);
+class SceneManager 
+{
+public:
+	/**
+	 *
+	 */
+	void Update(SceneManager& sceneManager, PlatformSystem& platformSystem);
 
-	private:
-	std::shared_ptr<Game::Scene> currcene;
-	std::shared_ptr<Game::Scene> prevScene;
+	/**
+	 *
+	 */
+	void ChangeScene(std::unique_ptr<Game::Scene> next);
+
+private:
+	std::unique_ptr<Game::Scene> m_pCurrScene; // The current scene shown ingame
+	std::unique_ptr<Game::Scene> m_pPendScene; // Pending upcoming scene
 };
 
 #endif

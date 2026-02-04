@@ -126,59 +126,64 @@ public:
 
 #endif
 	/**
-	* 
-	*/
+	 * 
+	 */
 	void SetupDrawing();
 
 	/**
-	*
-	*/
+	 *
+	 */
+	void Clear();
+
+	/**
+	 *
+	 */
 	void DrawAt(char chToDraw, int x, int y);
 	
 	/**
-	*
-	*/
+	 *
+	 */
 	void DrawAt(char chToDraw, int fgColor, int x, int y);
 	
 	/**
-	*
-	*/
+	 *
+	 */
 	void DrawAt(char chToDraw, int fgColor, int bgColor, int x, int y);
 	
 	/**
-	*
-	*/
+	 *
+	 */
 	void DrawString(string st, int x, int y);
 
 
 	/**
-	* 
-	*/
+	 * 
+	 */
 	void ReadInput();
 	
 	/**
-	*
-	*/
+	 *
+	 */
 	void Render();
 
 	/**
-	*
-	*/
+	 *
+	 */
 	bool IsKeyPressed(int ch);
 
 	/**
-	*
-	*/
+	 *
+	 */
 	void NewFrame();
 
 	/**
-	*
-	*/
+	 *
+	 */
 	void EndFrame();
 
 	/**
-	*
-	*/
+	 *
+	 */
 	void ExitGame();
 };
 #endif // SYSWRAP_H

@@ -1,18 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
-#include "../syswrap.h"
-
-// #include "game/entity.h"
-// #include "game/biome.h"
-// #include "gamepackage.h"
 
 namespace Game
 {
 	class G
 	{
-		// G(const G& copy) = delete;
-		// G operator=(const G& copy) = delete;
-
 		public:
 		G() 
 		: currentGameState(GameState::MAIN_MENU) 

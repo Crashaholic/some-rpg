@@ -2,18 +2,20 @@
 
 #include "../scene.h"
 
-namespace Game 
+class MainMenuScene : public Game::Scene 
 {
-	class MainMenuScene : public Scene 
-	{
+public:
+	/**
+	 * \brief 
+	 */ 
+	void Update(SceneManager& scnm, PlatformSystem& p) override;
 
-	public:
-		/// @brief 
-		void Update(PlatformSystem& p) override;
-		// void Draw() override;
-	private:
-		int m_iSelector;
+	void OnEnter() override;
 
-	};
-}
+	void OnExit() override;
+
+private:
+	int m_iSelector = 0;
+
+};
 

@@ -43,6 +43,19 @@ void PlatformSystem::SetupDrawing()
 #endif
 }
 
+void PlatformSystem::Clear()
+{
+#ifdef PLATFORM_LINUX
+
+#endif
+#ifdef PLATFORM_WINDOWS
+	CHAR_INFO clear;
+	clear.Char.AsciiChar = ' ';
+	clear.Attributes = COL_WHT;
+	std::fill(std::begin(consoleBuffer), std::end(consoleBuffer), clear);
+#endif
+}
+
 void PlatformSystem::DrawAt(char chToDraw, int x, int y)
 {
 	// this if check is to see if the whole string would fit within the window
