@@ -115,7 +115,7 @@ void PlatformSystem::ReadInput()
 void PlatformSystem::Render()
 {
 #ifdef PLATFORM_LINUX
-	refresh();
+	// refresh();
 #endif
 #ifdef PLATFORM_WINDOWS
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
@@ -150,6 +150,10 @@ void PlatformSystem::NewFrame()
 {
 #ifdef PLATFORM_LINUX
 	// clear();
+	halfdelay(1);
+	werase(mainWindow);
+	wnoutrefresh(mainWindow);
+	doupdate();
 #endif
 #ifdef PLATFORM_WINDOWS
 	// something to go here on dinwows

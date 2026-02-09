@@ -1,7 +1,7 @@
 #include "game.h"
 
 #include "../syswrap.h"
-#include "scenemanager.h"
+#include "../scenemanager.h"
 #include "scenes/mainmenu.h"
 
 PlatformSystem p = PlatformSystem();

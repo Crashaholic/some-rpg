@@ -13,6 +13,9 @@ set (all_SRCS
     "${PROJECT_SOURCE_DIR}/src/syswrap.cpp"
     "${PROJECT_SOURCE_DIR}/src/mysysdef.h"
     "${PROJECT_SOURCE_DIR}/src/syswrap.h"
+    "${PROJECT_SOURCE_DIR}/src/scene.h"
+    "${PROJECT_SOURCE_DIR}/src/scenemanager.h"
+    "${PROJECT_SOURCE_DIR}/src/scenemanager.cpp"
     
 	"${PROJECT_SOURCE_DIR}/src/game/game.h"
     "${PROJECT_SOURCE_DIR}/src/game/game.cpp"
@@ -20,9 +23,6 @@ set (all_SRCS
     "${PROJECT_SOURCE_DIR}/src/game/stat.h"
     "${PROJECT_SOURCE_DIR}/src/game/uidgen.h"
     "${PROJECT_SOURCE_DIR}/src/game/serializable.h"
-    "${PROJECT_SOURCE_DIR}/src/game/scene.h"
-    "${PROJECT_SOURCE_DIR}/src/game/scenemanager.h"
-    "${PROJECT_SOURCE_DIR}/src/game/scenemanager.cpp"
 
     "${PROJECT_SOURCE_DIR}/src/game/scenes/mainmenu.h"
     "${PROJECT_SOURCE_DIR}/src/game/scenes/mainmenu.cpp"

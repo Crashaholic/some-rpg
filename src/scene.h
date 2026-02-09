@@ -2,7 +2,6 @@
 #define SCENE_H
 
 // #include "../syswrap.h"
-#include <string>
 
 // forward declare PlatformSystem
 class PlatformSystem;

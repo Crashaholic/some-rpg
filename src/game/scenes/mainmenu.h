@@ -1,6 +1,7 @@
-#pragma once
+#ifndef MAINMENUSCENE_H
+#define MAINMENUSCENE_H
 
-#include "../scene.h"
+#include "../../scene.h"
 
 class MainMenuScene : public Game::Scene 
 {
@@ -18,4 +19,5 @@ private:
 	int m_iSelector = 0;
 
 };
+#endif
 

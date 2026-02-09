@@ -1,7 +1,7 @@
 #include "mainmenu.h"
 
 #include "../../syswrap.h"
-#include "../scenemanager.h"
+#include "../../scenemanager.h"
 #include "pregame.h"
 
 void MainMenuScene::OnEnter()
